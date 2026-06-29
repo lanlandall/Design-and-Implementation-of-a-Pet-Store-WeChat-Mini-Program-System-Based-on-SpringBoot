@@ -1,0 +1,36 @@
+server:
+  port: 8080
+
+
+spring:
+  application:
+    name: pet-mall-backend
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/pet_mall?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.petmall.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+wx:
+  app-id: wx7c88b819c9bf47c0
+  app-secret: 4d7ea87caae6a32dcd3f05c58c1fc36e
+
+logging:
+  level:
+    com.petmall: debug
