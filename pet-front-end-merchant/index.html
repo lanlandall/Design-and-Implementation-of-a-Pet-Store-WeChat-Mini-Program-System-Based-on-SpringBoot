@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>宠物之家 - 商家管理后台</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/axios@1.6.0/dist/axios.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">🐾</div>
+                <div class="logo-text">
+                    <h2>宠物之家</h2>
+                    <p>商家管理后台</p>
+                </div>
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" data-tab="users"><span class="icon">👥</span><span>用户管理</span></a>
+                <a href="#" class="nav-item" data-tab="pets"><span class="icon">🐕</span><span>宠物管理</span></a>
+                <a href="#" class="nav-item" data-tab="products"><span class="icon">📦</span><span>商品管理</span></a>
+                <a href="#" class="nav-item" data-tab="services"><span class="icon">🛠️</span><span>服务管理</span></a>
+                <a href="#" class="nav-item" data-tab="orders"><span class="icon">📋</span><span>订单管理</span></a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="admin-info">
+                    <div class="admin-avatar">👨‍💼</div>
+                    <div class="admin-details">
+                        <div class="admin-name" id="adminName">商家管理员</div>
+                        <div class="admin-role">超级管理员</div>
+                    </div>
+                </div>
+                <button class="logout-btn" id="logoutBtn">退出登录</button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <div class="header-title">
+                    <h1 id="pageTitle">用户管理</h1>
+                    <p class="header-desc">管理平台所有用户和宠物信息</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" id="addBtn">+ 新增用户</button>
+                </div>
+            </header>
+
+            <!-- 用户管理页面 -->
+            <div id="usersPage" class="page-content active">
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-info"><div class="stat-value" id="totalUsers">0</div><div class="stat-label">总用户数</div></div></div>
+                    <div class="stat-card"><div class="stat-icon">🐕</div><div class="stat-info"><div class="stat-value" id="totalUserPets">0</div><div class="stat-label">宠物总数</div></div></div>
+                    <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-info"><div class="stat-value" id="activeUsers">0</div><div class="stat-label">活跃用户</div></div></div>
+                </div>
+                <div class="filter-bar">
+                    <div class="search-box"><span class="search-icon">🔍</span><input type="text" id="userSearch" placeholder="搜索用户名/手机号..." class="search-input"></div>
+                    <button class="btn btn-secondary" id="resetUserFilter">重置</button>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead><tr><th style="width:40px"></th><th>ID</th><th>头像</th><th>用户名</th><th>手机号</th><th>地址</th><th>宠物数</th><th>注册时间</th><th>状态</th><th>操作</th></tr></thead>
+                        <tbody id="userTableBody"><tr><td colspan="10" class="loading">加载中...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="userPagination"></div>
+            </div>
+
+            <!-- 宠物管理页面 -->
+            <div id="petsPage" class="page-content">
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-icon">🐕</div><div class="stat-info"><div class="stat-value" id="totalPets">0</div><div class="stat-label">总宠物数</div></div></div>
+                    <div class="stat-card"><div class="stat-icon">🐱</div><div class="stat-info"><div class="stat-value" id="catCount">0</div><div class="stat-label">猫咪</div></div></div>
+                    <div class="stat-card"><div class="stat-icon">🐶</div><div class="stat-info"><div class="stat-value" id="dogCount">0</div><div class="stat-label">狗狗</div></div></div>
+                    <div class="stat-card"><div class="stat-icon">🐰</div><div class="stat-info"><div class="stat-value" id="rabbitCount">0</div><div class="stat-label">兔子</div></div></div>
+                    <div class="stat-card"><div class="stat-icon">🐹</div><div class="stat-info"><div class="stat-value" id="hamsterCount">0</div><div class="stat-label">仓鼠</div></div></div>
+                    <div class="stat-card"><div class="stat-icon">🐦</div><div class="stat-info"><div class="stat-value" id="birdCount">0</div><div class="stat-label">鸟类</div></div></div>
+                </div>
+                <div class="filter-bar">
+                    <div class="search-box"><span class="search-icon">🔍</span><input type="text" id="petSearch" placeholder="搜索宠物名/品种/主人..." class="search-input"></div>
+                    <select id="petTypeFilter" class="filter-select"><option value="">全部类型</option><option value="狗">🐕 狗狗</option><option value="猫">🐱 猫咪</option></select>
+                    <button class="btn btn-secondary" id="resetPetFilter">重置</button>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead><tr><th>ID</th><th>头像</th><th>名称</th><th>品种</th><th>类型</th><th>年龄(月)</th><th>主人</th><th>主人手机</th><th>状态</th><th>操作</th></tr>
+                        </thead>
+                        <tbody id="petTableBody"><tr><td colspan="10" class="loading">加载中...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="petPagination"></div>
+            </div>
+
+            <!-- 商品管理页面 -->
+            <div id="productsPage" class="page-content">
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-icon">📦</div><div class="stat-info"><div class="stat-value" id="totalProducts">0</div><div class="stat-label">总商品数</div></div></div>
+                    <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-info"><div class="stat-value" id="onShelfProducts">0</div><div class="stat-label">已上架</div></div></div>
+                    <div class="stat-card"><div class="stat-icon">📉</div><div class="stat-info"><div class="stat-value" id="offShelfProducts">0</div><div class="stat-label">已下架</div></div></div>
+                </div>
+                <div class="filter-bar">
+                    <div class="search-box"><span class="search-icon">🔍</span><input type="text" id="productSearch" placeholder="搜索商品名称..." class="search-input"></div>
+                    <select id="productCategory" class="filter-select"><option value="">全部分类</option><option value="1">狗狗主粮</option><option value="2">狗狗零食</option><option value="3">驱虫清洁</option><option value="4">营养保健</option><option value="5">家居出行</option><option value="6">常备药品</option><option value="7">玩具</option><option value="8">服饰</option><option value="9">猫咪主粮</option><option value="10">猫咪零食</option><option value="11">保健护理</option><option value="12">生活用品</option></select>
+                    <select id="productStatus" class="filter-select"><option value="">全部状态</option><option value="1">已上架</option><option value="0">已下架</option></select>
+                    <button class="btn btn-secondary" id="resetProductFilter">重置</button>
+                    <button class="btn btn-primary" id="addProductBtn">+ 新增商品</button>
+                </div>
+                <div class="table-container">
+                    <table class="data-table"><thead><tr><th>ID</th><th>图片</th><th>商品名称</th><th>分类</th><th>价格</th><th>库存</th><th>销量</th><th>状态</th><th>操作</th></tr></thead>
+                    <tbody id="productTableBody"><tr><td colspan="9" class="loading">加载中...</td></tr></tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="productPagination"></div>
+            </div>
+
+            <!-- 服务管理页面 -->
+            <div id="servicesPage" class="page-content">
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-icon">🛠️</div><div class="stat-info"><div class="stat-value" id="totalServices">0</div><div class="stat-label">总服务数</div></div></div>
+                    <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-info"><div class="stat-value" id="onShelfServices">0</div><div class="stat-label">已上架</div></div></div>
+                    <div class="stat-card"><div class="stat-icon">📉</div><div class="stat-info"><div class="stat-value" id="offShelfServices">0</div><div class="stat-label">已下架</div></div></div>
+                </div>
+                <div class="filter-bar">
+                    <div class="search-box"><span class="search-icon">🔍</span><input type="text" id="serviceSearch" placeholder="搜索服务名称..." class="search-input"></div>
+                    <select id="serviceCategory" class="filter-select"><option value="">全部分类</option><option value="1">推荐套餐</option><option value="2">限时折扣</option><option value="3">基础护理</option><option value="4">上门铲屎</option><option value="5">宠物寄养</option><option value="6">专车运送</option></select>
+                    <select id="serviceStatus" class="filter-select"><option value="">全部状态</option><option value="1">已上架</option><option value="0">已下架</option></select>
+                    <button class="btn btn-secondary" id="resetServiceFilter">重置</button>
+                    <button class="btn btn-primary" id="addServiceBtn">+ 新增服务</button>
+                </div>
+                <div class="table-container">
+                    <table class="data-table"><thead><tr><th>ID</th><th>图片</th><th>服务名称</th><th>分类</th><th>价格</th><th>原价</th><th>销量</th><th>状态</th><th>操作</th></tr></thead>
+                    <tbody id="serviceTableBody"><tr><td colspan="9" class="loading">加载中...</td></tr></tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="servicePagination"></div>
+            </div>
+
+            <!-- 订单管理页面 -->
+            <div id="ordersPage" class="page-content">
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-info"><div class="stat-value" id="totalOrders">0</div><div class="stat-label">总订单数</div></div></div>
+                    <div class="stat-card"><div class="stat-icon">⏳</div><div class="stat-info"><div class="stat-value" id="pendingOrders">0</div><div class="stat-label">待处理</div></div></div>
+                    <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-info"><div class="stat-value" id="totalIncome">¥0</div><div class="stat-label">总收入</div></div></div>
+                </div>
+                <div class="filter-bar">
+                    <div class="search-box"><span class="search-icon">🔍</span><input type="text" id="orderSearch" placeholder="搜索订单号..." class="search-input"></div>
+                    <select id="orderType" class="filter-select"><option value="">全部类型</option><option value="1">商城订单</option><option value="2">服务订单</option></select>
+                    <select id="orderStatus" class="filter-select"><option value="">全部状态</option><option value="0">待付款</option><option value="1">待发货/待服务</option><option value="2">已发货/进行中</option><option value="3">已完成</option><option value="4">已取消</option><option value="5">退款中</option><option value="6">已退款</option></select>
+                    <button class="btn btn-secondary" id="resetOrderFilter">重置</button>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>订单ID</th>
+                                <th>订单号</th>
+                                <th>用户ID</th>
+                                <th>类型</th>
+                                <th>总金额</th>
+                                <th>状态</th>
+                                <th>创建时间</th>
+                                <th>服务时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orderTableBody">
+                            <tr><td colspan="9" class="loading">加载中...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="orderPagination"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 用户编辑弹窗 -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="userModalTitle">编辑用户</h3>
+                <span class="close" onclick="closeUserModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>用户头像</label>
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <img id="userAvatarPreview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 24 24' fill='%23999'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; background: #f0f0f0;">
+                        <input type="file" id="userAvatarFile" accept="image/*" style="display: none;">
+                        <button type="button" class="btn btn-secondary" onclick="document.getElementById('userAvatarFile').click()">选择图片</button>
+                    </div>
+                    <input type="hidden" id="editAvatarUrl">
+                </div>
+                <div class="form-group">
+                    <label>用户名 <span style="color:red">*</span></label>
+                    <input type="text" id="editUsername" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>手机号</label>
+                    <input type="text" id="editPhone" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>地址</label>
+                    <input type="text" id="editAddress" class="form-input">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeUserModal()">取消</button>
+                <button class="btn btn-primary" onclick="saveUser()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增宠物弹窗 -->
+    <div id="addPetModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>新增宠物</h3>
+                <span class="close" onclick="closeAddPetModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>宠物头像</label>
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <img id="addPetAvatarPreview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 24 24' fill='%23999'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E" style="width: 60px; height: 60px; border-radius: 10px; object-fit: cover; background: #f0f0f0;">
+                        <input type="file" id="addPetAvatarFile" accept="image/*" style="display: none;">
+                        <button type="button" class="btn btn-secondary" onclick="document.getElementById('addPetAvatarFile').click()">选择图片</button>
+                    </div>
+                    <input type="hidden" id="addPetAvatar">
+                </div>
+                <div class="form-group">
+                    <label>宠物名称 <span style="color:red">*</span></label>
+                    <input type="text" id="addPetName" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>品种</label>
+                    <input type="text" id="addPetBreed" class="form-input">
+                </div>
+                <div class="form-row">
+                    <div class="form-group flex-1">
+                        <label>类型</label>
+                        <select id="addPetType" class="form-input">
+                            <option value="狗">🐕 狗狗</option>
+                            <option value="猫">🐱 猫咪</option>
+                        </select>
+                    </div>
+                    <div class="form-group flex-1">
+                        <label>年龄(月)</label>
+                        <input type="number" id="addPetAge" class="form-input">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>状态</label>
+                    <select id="addPetStatus" class="form-input">
+                        <option value="1">正常</option>
+                        <option value="0">禁用</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeAddPetModal()">取消</button>
+                <button class="btn btn-primary" onclick="saveNewPet()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 宠物编辑弹窗 -->
+    <div id="petModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>编辑宠物</h3>
+                <span class="close" onclick="closePetModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>宠物头像</label>
+                    <div style="display: flex; gap: 12px; align-items: center;">
+                        <img id="petAvatarPreview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 24 24' fill='%23999'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E" style="width: 60px; height: 60px; border-radius: 10px; object-fit: cover; background: #f0f0f0;">
+                        <input type="file" id="petAvatarFile" accept="image/*" style="display: none;">
+                        <button type="button" class="btn btn-secondary" onclick="document.getElementById('petAvatarFile').click()">选择图片</button>
+                    </div>
+                    <input type="hidden" id="editPetAvatar">
+                </div>
+                <div class="form-group">
+                    <label>宠物名称</label>
+                    <input type="text" id="editPetName" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>品种</label>
+                    <input type="text" id="editPetBreed" class="form-input">
+                </div>
+                <div class="form-row">
+                    <div class="form-group flex-1">
+                        <label>类型</label>
+                        <select id="editPetType" class="form-input">
+                            <option value="狗">🐕 狗狗</option>
+                            <option value="猫">🐱 猫咪</option>
+                        </select>
+                    </div>
+                    <div class="form-group flex-1">
+                        <label>年龄(月)</label>
+                        <input type="number" id="editPetAge" class="form-input">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>状态</label>
+                    <select id="editPetStatus" class="form-input">
+                        <option value="1">正常</option>
+                        <option value="0">禁用</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closePetModal()">取消</button>
+                <button class="btn btn-primary" onclick="savePet()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 商品/服务编辑弹窗 -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">编辑商品</h3>
+                <span class="close" onclick="closeEditModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group"><label>名称</label><input type="text" id="editName" class="form-input"></div>
+                <div class="form-group"><label>分类</label><select id="editCategoryId" class="form-input"><option value="1">狗狗主粮</option><option value="2">狗狗零食</option><option value="3">驱虫清洁</option><option value="4">营养保健</option><option value="5">家居出行</option><option value="6">常备药品</option><option value="7">玩具</option><option value="8">服饰</option><option value="9">猫咪主粮</option><option value="10">猫咪零食</option><option value="11">保健护理</option><option value="12">生活用品</option></select></div>
+                <div class="form-row"><div class="form-group flex-1"><label>价格</label><input type="number" id="editPrice" step="0.01" class="form-input"></div><div class="form-group flex-1" id="originalPriceGroup"><label>原价</label><input type="number" id="editOriginalPrice" step="0.01" class="form-input"></div></div>
+                <div class="form-group" id="stockGroup"><label>库存</label><input type="number" id="editStock" class="form-input"></div>
+                <div class="form-group"><label>状态</label><select id="editStatus" class="form-input"><option value="1">上架</option><option value="0">下架</option></select></div>
+            </div>
+            <div class="modal-footer"><button class="btn btn-secondary" onclick="closeEditModal()">取消</button><button class="btn btn-primary" onclick="saveItem()">保存</button></div>
+        </div>
+    </div>
+
+    <!-- 订单详情弹窗 -->
+    <div id="orderModal" class="modal"><div class="modal-content modal-lg"><div class="modal-header"><h3>订单详情</h3><span class="close" onclick="closeOrderModal()">&times;</span></div><div class="modal-body" id="orderDetailBody"></div><div class="modal-footer"><button class="btn btn-secondary" onclick="closeOrderModal()">关闭</button></div></div></div>
+
+    <script src="api/api.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
