@@ -1,0 +1,312 @@
+/* pages/1/3pets/pet.wxss */
+.page {
+  min-height: 100vh;
+  background-color: #f8f4ff;
+  padding-top: 120rpx;
+}
+
+/* 导航栏 */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 120rpx;
+  background: linear-gradient(135deg, #b39ddb, #9575cd);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30rpx;
+  z-index: 100;
+}
+
+.navbar-back {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-icon {
+  font-size: 48rpx;
+  color: #ffffff;
+}
+
+.navbar-title {
+  font-size: 34rpx;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.navbar-add {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-icon {
+  font-size: 48rpx;
+  color: #ffffff;
+}
+
+/* 宠物列表 */
+.pet-list {
+  padding: 20rpx;
+}
+
+.pet-card {
+  background-color: #ffffff;
+  border-radius: 20rpx;
+  margin-bottom: 20rpx;
+  padding: 24rpx;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4rpx 12rpx rgba(149, 117, 205, 0.1);
+  border: 2rpx solid #ede7f6;
+}
+
+.pet-avatar {
+  width: 100rpx;
+  height: 100rpx;
+  background: linear-gradient(135deg, #b39ddb, #9575cd);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+}
+
+.avatar-text {
+  font-size: 44rpx;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.pet-info {
+  flex: 1;
+}
+
+.pet-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #5e4b8c;
+  margin-bottom: 8rpx;
+}
+
+.pet-detail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin-bottom: 8rpx;
+}
+
+.pet-type, .pet-age, .pet-breed {
+  font-size: 24rpx;
+  color: #b39ddb;
+  background-color: #f8f4ff;
+  padding: 4rpx 12rpx;
+  border-radius: 20rpx;
+}
+
+.pet-weight {
+  font-size: 24rpx;
+  color: #9575cd;
+}
+
+.pet-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.action-btn {
+  padding: 10rpx 24rpx;
+  border-radius: 30rpx;
+  font-size: 24rpx;
+  text-align: center;
+}
+
+.action-btn.edit {
+  background-color: #f3e5f5;
+  color: #9575cd;
+}
+
+.action-btn.delete {
+  background-color: #ffebee;
+  color: #e74c3c;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 150rpx 60rpx;
+}
+
+.empty-image {
+  width: 300rpx;
+  height: 300rpx;
+  margin-bottom: 40rpx;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: #b39ddb;
+  margin-bottom: 16rpx;
+}
+
+.empty-desc {
+  font-size: 26rpx;
+  color: #d1c4e9;
+}
+
+/* 底部提示 */
+.bottom-tip {
+  text-align: center;
+  padding: 30rpx;
+  color: #d1c4e9;
+  font-size: 24rpx;
+}
+
+/* 弹窗样式 */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-container {
+  width: 85%;
+  background: #ffffff;
+  border-radius: 32rpx;
+  overflow: hidden;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.delete-modal {
+  width: 70%;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 2rpx solid #ede7f6;
+}
+
+.modal-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #5e4b8c;
+}
+
+.modal-close {
+  font-size: 48rpx;
+  color: #d1c4e9;
+  line-height: 1;
+}
+
+.modal-body {
+  padding: 30rpx;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.form-item {
+  margin-bottom: 24rpx;
+}
+
+.form-label {
+  display: block;
+  font-size: 28rpx;
+  color: #5e4b8c;
+  margin-bottom: 12rpx;
+  font-weight: 500;
+}
+
+.form-input {
+  width: 100%;
+  padding: 20rpx;
+  background: #f8f4ff;
+  border-radius: 16rpx;
+  font-size: 28rpx;
+  border: 2rpx solid #ede7f6;
+}
+
+.form-picker {
+  padding: 20rpx;
+  background: #f8f4ff;
+  border-radius: 16rpx;
+  font-size: 28rpx;
+  color: #5e4b8c;
+  border: 2rpx solid #ede7f6;
+}
+
+.form-textarea {
+  width: 100%;
+  padding: 20rpx;
+  background: #f8f4ff;
+  border-radius: 16rpx;
+  font-size: 28rpx;
+  border: 2rpx solid #ede7f6;
+  min-height: 150rpx;
+}
+
+.delete-text {
+  font-size: 30rpx;
+  color: #5e4b8c;
+  text-align: center;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.delete-desc {
+  font-size: 24rpx;
+  color: #b39ddb;
+  text-align: center;
+  display: block;
+}
+
+.modal-footer {
+  display: flex;
+  border-top: 2rpx solid #ede7f6;
+}
+
+.modal-btn {
+  flex: 1;
+  height: 100rpx;
+  line-height: 100rpx;
+  text-align: center;
+  font-size: 30rpx;
+  border: none;
+  border-radius: 0;
+  background: #ffffff;
+}
+
+.modal-btn.cancel {
+  color: #b39ddb;
+  border-right: 2rpx solid #ede7f6;
+}
+
+.modal-btn.confirm {
+  color: #9575cd;
+}
+
+.modal-btn.confirm.delete {
+  color: #e74c3c;
+}

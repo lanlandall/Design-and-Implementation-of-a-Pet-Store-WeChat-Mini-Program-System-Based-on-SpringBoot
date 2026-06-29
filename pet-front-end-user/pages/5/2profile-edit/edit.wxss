@@ -1,0 +1,92 @@
+/* pages/5/2profile-edit/edit.wxss */
+.container {
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding-bottom: 40rpx;
+}
+
+.avatar-section {
+  background: linear-gradient(135deg, #b39ddb, #9575cd);
+  padding: 60rpx 0 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatar-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatar {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  border: 6rpx solid rgba(255,255,255,0.5);
+  background: #fff;
+}
+
+.avatar-tip {
+  color: rgba(255,255,255,0.9);
+  font-size: 26rpx;
+  margin-top: 20rpx;
+}
+
+.section {
+  background: #fff;
+  margin: 30rpx 30rpx 0;
+  border-radius: 24rpx;
+  padding: 30rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30rpx;
+}
+
+.form-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #eee;
+}
+
+.form-item:last-child {
+  border-bottom: none;
+}
+
+.label {
+  width: 140rpx;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.input {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.pwd-btn {
+  background: #9575cd;
+  color: #fff;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  padding: 20rpx 40rpx;
+  margin-top: 30rpx;
+}
+
+.bottom-btn {
+  padding: 40rpx 30rpx;
+}
+
+.save-btn {
+  background: linear-gradient(135deg, #b39ddb, #9575cd);
+  color: #fff;
+  border-radius: 50rpx;
+  font-size: 32rpx;
+  padding: 24rpx 0;
+}

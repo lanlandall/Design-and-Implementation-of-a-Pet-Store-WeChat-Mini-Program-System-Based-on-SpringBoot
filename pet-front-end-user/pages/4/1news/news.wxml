@@ -1,0 +1,109 @@
+<!-- pages/4/1news/news.wxml -->
+<view class="page">
+  <!-- 自定义导航栏 -->
+  <view class="custom-navbar">
+    <view class="navbar-title">资讯</view>
+    <view class="navbar-right" bindtap="goToSearch">
+      <text class="icon">🔍</text>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-container" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <scroll-view class="main-scroll" scroll-y="{{true}}" enhanced refresher-enabled="{{true}}" 
+               refresher-triggered="{{refreshing}}" bindrefresherrefresh="onRefresh"
+               bindscrolltolower="loadMore" wx:else>
+    
+    <!-- ===== 百科分类导航 ===== -->
+    <view class="百科分类">
+      <view class="section-title">
+        <text class="title-text">🐾 养宠百科</text>
+        <text class="title-more" bindtap="goToAllKnowledge">全部</text>
+      </view>
+      
+      <view class="knowledge-grid">
+        <view class="knowledge-item" wx:for="{{knowledgeCategories}}" wx:key="id" bindtap="goToKnowledge" data-id="{{item.id}}" data-name="{{item.name}}">
+          <view class="knowledge-icon" style="background: {{item.bgColor}}">
+            <text class="icon-text">{{item.icon}}</text>
+          </view>
+          <text class="knowledge-name">{{item.name}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- ===== 社区热帖 ===== -->
+    <view class="community-section">
+      <view class="section-title">
+        <text class="title-text">🌟 社区热帖</text>
+        <text class="title-more" bindtap="goToAllPosts">更多</text>
+      </view>
+
+      <!-- 帖子列表（小红书样式） -->
+      <view class="post-list">
+        <view class="post-card" wx:for="{{posts}}" wx:key="id" bindtap="goToPostDetail" data-id="{{item.id}}">
+          <!-- 用户信息 -->
+          <view class="post-user">
+            <image class="user-avatar" src="{{item.user.avatar || '/images/user-default.png'}}" mode="aspectFill"></image>
+            <view class="user-info">
+              <text class="user-name">{{item.user.name}}</text>
+              <text class="post-time">{{item.time}}</text>
+            </view>
+            <view class="follow-btn {{item.isFollowed ? 'followed' : ''}}" bindtap="onFollow" data-id="{{item.user.id}}" catchtap>
+              <text>{{item.isFollowed ? '已关注' : '+ 关注'}}</text>
+            </view>
+          </view>
+
+          <!-- 帖子内容 -->
+          <view class="post-content">
+            <text class="post-title" wx:if="{{item.title}}">{{item.title}}</text>
+            <text class="post-desc">{{item.desc}}</text>
+          </view>
+
+          <!-- 图片墙（小红书样式） -->
+          <view class="post-images {{item.images.length === 1 ? 'single' : (item.images.length === 2 ? 'double' : 'grid')}}">
+            <image class="post-image" wx:for="{{item.images}}" wx:key="index" 
+                   src="{{item}}" mode="aspectFill" 
+                   bindtap="previewImage" data-url="{{item}}" data-list="{{item.images}}" catchtap></image>
+          </view>
+
+          <!-- 互动信息 -->
+          <view class="post-actions">
+            <view class="action-item" bindtap="onLike" data-id="{{item.id}}" catchtap>
+              <text class="action-icon">{{item.isLiked ? '❤️' : '🤍'}}</text>
+              <text class="action-count">{{item.likes}}</text>
+            </view>
+            <view class="action-item" bindtap="onComment" data-id="{{item.id}}" catchtap>
+              <text class="action-icon">💬</text>
+              <text class="action-count">{{item.comments}}</text>
+            </view>
+            <view class="action-item" bindtap="onShare" data-id="{{item.id}}" catchtap>
+              <text class="action-icon">↗️</text>
+              <text class="action-count">{{item.shares}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 加载更多 -->
+      <view class="load-more" wx:if="{{loadingPosts}}">
+        <view class="loading-spinner small"></view>
+        <text>加载中...</text>
+      </view>
+      <view class="no-more" wx:if="{{!hasMorePosts && posts.length > 0}}">
+        <text>—— 没有更多了 ——</text>
+      </view>
+    </view>
+
+    <!-- 底部留白 -->
+    <view class="bottom-space"></view>
+  </scroll-view>
+
+  <!-- 发布按钮（悬浮） -->
+  <view class="publish-btn" bindtap="goToPublish">
+    <text class="publish-icon">✏️</text>
+  </view>
+</view>

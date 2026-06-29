@@ -1,0 +1,92 @@
+.container {
+  height: 100vh;
+  background: linear-gradient(135deg, #b39ddb, #9575cd);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-box {
+  background: white;
+  border-radius: 40rpx;
+  padding: 60rpx 50rpx;
+  width: 80%;
+  text-align: center;
+  box-shadow: 0 20rpx 40rpx rgba(0,0,0,0.1);
+}
+
+.logo {
+  font-size: 80rpx;
+  margin-bottom: 20rpx;
+}
+
+.title {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #5e4b8c;
+  margin-bottom: 10rpx;
+}
+
+.desc {
+  font-size: 24rpx;
+  color: #b39ddb;
+  margin-bottom: 50rpx;
+}
+
+.login-btn {
+  background: linear-gradient(135deg, #b39ddb, #9575cd);
+  color: white;
+  border-radius: 50rpx;
+  font-size: 32rpx;
+  padding: 24rpx 0;
+  margin-bottom: 20rpx;
+}
+
+.dev-btn {
+  background: transparent;
+  color: #9575cd;
+  border: 2rpx solid #9575cd;
+  border-radius: 50rpx;
+  font-size: 28rpx;
+  padding: 20rpx 0;
+  margin-bottom: 20rpx;
+}
+
+.pwd-toggle {
+  padding: 10rpx;
+  color: #9575cd;
+  font-size: 26rpx;
+  margin-bottom: 10rpx;
+}
+
+.pwd-form {
+  width: 100%;
+  margin-top: 10rpx;
+}
+
+.pwd-input {
+  width: 100%;
+  height: 80rpx;
+  background: #f5f5f5;
+  border-radius: 16rpx;
+  padding: 0 30rpx;
+  margin-bottom: 16rpx;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}
+
+.pwd-btn {
+  width: 100%;
+  height: 80rpx;
+  background: #9575cd;
+  color: white;
+  border-radius: 40rpx;
+  font-size: 30rpx;
+  margin-top: 10rpx;
+}
+
+.tips {
+  font-size: 22rpx;
+  color: #d1c4e9;
+  margin-top: 30rpx;
+}

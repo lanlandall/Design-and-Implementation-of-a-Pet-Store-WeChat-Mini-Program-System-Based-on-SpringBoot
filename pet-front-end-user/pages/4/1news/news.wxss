@@ -1,0 +1,356 @@
+/* pages/4/1news/news.wxss */
+.page {
+  min-height: 100vh;
+  background-color: #f8f4ff;
+  padding-top: 120rpx;
+  position: relative;
+}
+
+/* 自定义导航栏 */
+.custom-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 120rpx;
+  background: linear-gradient(135deg, #b39ddb, #9575cd);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(149, 117, 205, 0.3);
+  z-index: 100;
+}
+
+.navbar-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.navbar-right {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-right .icon {
+  font-size: 40rpx;
+  color: #ffffff;
+}
+
+/* 主滚动区域 */
+.main-scroll {
+  height: 100%;
+  background-color: #f8f4ff;
+}
+
+/* 加载状态 */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  color: #b39ddb;
+  font-size: 28rpx;
+}
+
+.loading-spinner {
+  width: 70rpx;
+  height: 70rpx;
+  border: 6rpx solid #f3e5f5;
+  border-top: 6rpx solid #9575cd;
+  border-radius: 50%;
+  margin-bottom: 20rpx;
+  animation: spin 1s linear infinite;
+}
+
+.loading-spinner.small {
+  width: 40rpx;
+  height: 40rpx;
+  border-width: 4rpx;
+  margin-right: 16rpx;
+  margin-bottom: 0;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 通用标题样式 */
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+  padding: 0 30rpx;
+}
+
+.title-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #5e4b8c;
+  position: relative;
+  padding-left: 20rpx;
+}
+
+.title-text::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6rpx;
+  height: 30rpx;
+  background: linear-gradient(135deg, #b39ddb, #9575cd);
+  border-radius: 6rpx;
+}
+
+.title-more {
+  font-size: 26rpx;
+  color: #b39ddb;
+}
+
+/* ===== 百科分类导航 ===== */
+.knowledge-section {
+  background-color: #ffffff;
+  margin: 30rpx;
+  padding: 30rpx 0;
+  border-radius: 30rpx;
+  box-shadow: 0 4rpx 16rpx rgba(149, 117, 205, 0.1);
+  border: 2rpx solid #ede7f6;
+}
+
+.knowledge-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20rpx;
+  padding: 0 20rpx;
+}
+
+.knowledge-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.knowledge-icon {
+  width: 90rpx;
+  height: 90rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16rpx;
+  box-shadow: 0 4rpx 12rpx rgba(149, 117, 205, 0.2);
+}
+
+.icon-text {
+  font-size: 40rpx;
+  color: #ffffff;
+}
+
+.knowledge-name {
+  font-size: 24rpx;
+  color: #5e4b8c;
+  text-align: center;
+}
+
+/* ===== 社区部分 ===== */
+.community-section {
+  background-color: #ffffff;
+  margin: 30rpx;
+  padding: 30rpx 0;
+  border-radius: 30rpx;
+  box-shadow: 0 4rpx 16rpx rgba(149, 117, 205, 0.1);
+  border: 2rpx solid #ede7f6;
+}
+
+/* 帖子列表 */
+.post-list {
+  padding: 0 30rpx;
+}
+
+.post-card {
+  margin-bottom: 40rpx;
+  padding-bottom: 30rpx;
+  border-bottom: 2rpx solid #f3e5f5;
+}
+
+.post-card:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+/* 用户信息 */
+.post-user {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.user-avatar {
+  width: 70rpx;
+  height: 70rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e1d9f0, #d1c4e9);
+  margin-right: 20rpx;
+}
+
+.user-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #5e4b8c;
+  margin-bottom: 6rpx;
+}
+
+.post-time {
+  font-size: 22rpx;
+  color: #b39ddb;
+}
+
+.follow-btn {
+  padding: 8rpx 24rpx;
+  font-size: 24rpx;
+  border-radius: 40rpx;
+  background: linear-gradient(135deg, #b39ddb, #9575cd);
+  color: #ffffff;
+}
+
+.follow-btn.followed {
+  background: #f3e5f5;
+  color: #9575cd;
+  border: 2rpx solid #d1c4e9;
+}
+
+/* 帖子内容 */
+.post-content {
+  margin-bottom: 20rpx;
+}
+
+.post-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #5e4b8c;
+  display: block;
+  margin-bottom: 12rpx;
+}
+
+.post-desc {
+  font-size: 26rpx;
+  color: #666666;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 图片墙 - 小红书样式 */
+.post-images {
+  display: grid;
+  gap: 4rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  margin-bottom: 20rpx;
+}
+
+.post-images.single {
+  grid-template-columns: 1fr;
+}
+
+.post-images.single .post-image {
+  height: 400rpx;
+}
+
+.post-images.double {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.post-images.double .post-image {
+  height: 300rpx;
+}
+
+.post-images.grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.post-images.grid .post-image {
+  aspect-ratio: 1;
+}
+
+.post-image {
+  width: 100%;
+  background: linear-gradient(135deg, #e1d9f0, #d1c4e9);
+}
+
+/* 互动信息 */
+.post-actions {
+  display: flex;
+  align-items: center;
+  gap: 50rpx;
+}
+
+.action-item {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.action-icon {
+  font-size: 32rpx;
+  color: #9575cd;
+}
+
+.action-count {
+  font-size: 24rpx;
+  color: #b39ddb;
+}
+
+/* 加载更多 */
+.load-more, .no-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30rpx 0;
+  color: #b39ddb;
+  font-size: 24rpx;
+}
+
+/* 发布按钮 */
+.publish-btn {
+  position: fixed;
+  right: 40rpx;
+  bottom: 100rpx;
+  width: 100rpx;
+  height: 100rpx;
+  background: linear-gradient(135deg, #b39ddb, #9575cd);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 24rpx rgba(149, 117, 205, 0.3);
+  z-index: 90;
+}
+
+.publish-icon {
+  font-size: 48rpx;
+  color: #ffffff;
+}
+
+/* 底部留白 */
+.bottom-space {
+  height: 30rpx;
+}

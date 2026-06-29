@@ -1,0 +1,44 @@
+<view class="container">
+  <view class="login-box">
+    <view class="logo">🐾</view>
+    <view class="title">宠物之家</view>
+    <view class="desc">宠物服务 · 商城 · 资讯</view>
+    
+    <!-- 微信一键登录 -->
+    <button class="login-btn" bindtap="handleWechatLogin">
+      <text>微信一键登录</text>
+    </button>
+    
+    <!-- 开发者登录 -->
+    <button class="dev-btn" bindtap="handleDevLogin">
+      <text>开发者登录</text>
+    </button>
+    
+    <!-- 切换账号密码登录 -->
+    <view class="pwd-toggle" bindtap="togglePwdLogin">
+      <text>{{ showPwdLogin ? '收起' : '账号密码登录' }}</text>
+    </view>
+    
+    <!-- 账号密码登录表单 -->
+    <view class="pwd-form" wx:if="{{showPwdLogin}}">
+      <input 
+        class="pwd-input" 
+        placeholder="请输入账号" 
+        value="{{account}}"
+        bindinput="onAccountInput"
+      />
+      <input 
+        class="pwd-input" 
+        placeholder="请输入密码" 
+        password
+        value="{{password}}"
+        bindinput="onPasswordInput"
+      />
+      <button class="pwd-btn" bindtap="handlePwdLogin">
+        <text>登录</text>
+      </button>
+    </view>
+    
+    <view class="tips">首次登录即自动注册</view>
+  </view>
+</view>

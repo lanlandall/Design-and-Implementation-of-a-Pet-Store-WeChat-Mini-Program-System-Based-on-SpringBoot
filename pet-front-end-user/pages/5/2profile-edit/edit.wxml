@@ -1,0 +1,57 @@
+<!--pages/5/2profile-edit/edit.wxml-->
+<view class="container">
+  <!-- 头像 -->
+  <view class="avatar-section">
+    <view class="avatar-box" bindtap="changeAvatar">
+      <image class="avatar" src="{{userInfo.avatarUrl || 'https://gd-hbimg.huaban.com/3d08684c78c6bef02339f8be1ba7e1d64f6dcfd828ba-nTzqqR_fw658'}}" mode="aspectFill"></image>
+      <view class="avatar-tip">点击更换头像</view>
+    </view>
+  </view>
+
+  <!-- 基本信息 -->
+  <view class="section">
+    <view class="section-title">基本信息</view>
+    
+    <view class="form-item">
+      <text class="label">昵称</text>
+      <input class="input" placeholder="请输入昵称" value="{{userInfo.username}}" bindinput="onUsernameInput"/>
+    </view>
+    
+    <view class="form-item">
+      <text class="label">账号</text>
+      <input class="input" placeholder="请输入账号" value="{{userInfo.account}}" bindinput="onAccountInput"/>
+    </view>
+    
+    <view class="form-item">
+      <text class="label">手机号</text>
+      <input class="input" type="number" placeholder="请输入手机号" value="{{userInfo.phone}}" bindinput="onPhoneInput"/>
+    </view>
+  </view>
+
+  <!-- 修改密码 -->
+  <view class="section">
+    <view class="section-title">修改密码</view>
+    
+    <view class="form-item">
+      <text class="label">原密码</text>
+      <input class="input" password placeholder="请输入原密码" value="{{oldPassword}}" bindinput="onOldPasswordInput"/>
+    </view>
+    
+    <view class="form-item">
+      <text class="label">新密码</text>
+      <input class="input" password placeholder="请输入新密码" value="{{newPassword}}" bindinput="onNewPasswordInput"/>
+    </view>
+    
+    <view class="form-item">
+      <text class="label">确认密码</text>
+      <input class="input" password placeholder="请再次输入新密码" value="{{confirmPassword}}" bindinput="onConfirmPasswordInput"/>
+    </view>
+    
+    <button class="pwd-btn" bindtap="changePassword">修改密码</button>
+  </view>
+
+  <!-- 保存按钮 -->
+  <view class="bottom-btn">
+    <button class="save-btn" bindtap="saveProfile">保存修改</button>
+  </view>
+</view>

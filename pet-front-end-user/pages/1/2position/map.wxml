@@ -1,0 +1,66 @@
+<!--pages/1/2position/map.wxml-->
+<view class="page">
+  <!-- 顶部导航栏 -->
+  <view class="custom-navbar">
+    <view class="back-btn" bindtap="goBack">
+      <text class="back-icon">←</text>
+    </view>
+    <view class="navbar-title">附近宠物店</view>
+    <view class="navbar-right" bindtap="refreshLocation">
+      <text class="refresh-icon">🔄</text>
+    </view>
+  </view>
+
+  <!-- 地图 -->
+  <map
+    id="map"
+    class="map-container"
+    latitude="{{latitude}}"
+    longitude="{{longitude}}"
+    scale="{{scale}}"
+    markers="{{markers}}"
+    controls="{{controls}}"
+    show-location
+    bindmarkertap="onMarkerTap"
+    bindcontroltap="onControlTap"
+  ></map>
+
+  <!-- 底部信息栏 -->
+  <view class="bottom-info">
+    <view class="location-info" bindtap="goToCurrentLocation">
+      <text class="location-dot">📍</text>
+      <text class="location-text">{{currentAddress || '正在定位...'}}</text>
+    </view>
+    <view class="shop-list-btn" bindtap="toggleShopList">
+      <text>附近门店 {{showShopList ? '▲' : '▼'}}</text>
+    </view>
+  </view>
+
+  <!-- 附近门店列表 -->
+  <view class="shop-list {{showShopList ? 'show' : ''}}">
+    <view class="shop-header">
+      <text class="shop-header-title">附近宠物店</text>
+      <text class="shop-header-count">共{{nearbyShops.length}}家</text>
+    </view>
+    <scroll-view scroll-y class="shop-scroll">
+      <view class="shop-item" wx:for="{{nearbyShops}}" wx:key="id" bindtap="goToShop" data-id="{{item.id}}" data-name="{{item.name}}" data-lat="{{item.latitude}}" data-lng="{{item.longitude}}">
+        <view class="shop-avatar">🐕</view>
+        <view class="shop-info">
+          <text class="shop-name">{{item.name}}</text>
+          <text class="shop-address">{{item.address}}</text>
+          <view class="shop-tags">
+            <text class="tag" wx:if="{{item.distance}}">距您{{item.distance}}km</text>
+            <text class="tag" wx:if="{{item.rating}}">⭐ {{item.rating}}</text>
+          </view>
+        </view>
+        <view class="shop-arrow">›</view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-mask" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text>定位中...</text>
+  </view>
+</view>

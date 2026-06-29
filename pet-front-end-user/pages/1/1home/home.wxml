@@ -1,0 +1,189 @@
+<!-- pages/1/1home/home.wxml -->
+<view class="page">
+  <!-- 自定义导航栏 -->
+  <view class="custom-navbar">
+    <view class="location-box" bindtap="goToMap">
+      <text class="location-icon">📍</text>
+      <text class="location-text">{{currentLocation || '正在定位...'}}</text>
+      <text class="location-arrow">▼</text>
+    </view>
+    <view class="navbar-right" bindtap="goToMessage">
+      <text class="icon">🔔</text>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-container" wx:if="{{loading && pets.length === 0}}">
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <scroll-view class="main-scroll" scroll-y="{{true}}" enhanced refresher-enabled="{{true}}" 
+               refresher-triggered="{{refreshing}}" bindrefresherrefresh="onRefresh"
+               bindscrolltolower="loadMore" wx:else>
+    
+    <!-- ===== 宠物大图区域 ===== -->
+    <view class="pet-banner-section">
+      <!-- 左右切换箭头（包括添加宝贝卡片时也显示箭头） -->
+      <view class="arrow-left {{allPets.length > 1 ? 'visible' : ''}}" bindtap="prevPet" wx:if="{{allPets.length > 1}}">‹</view>
+      <view class="arrow-right {{allPets.length > 1 ? 'visible' : ''}}" bindtap="nextPet" wx:if="{{allPets.length > 1}}">›</view>
+      
+      <!-- 宠物大图卡片 - 根据当前选中的卡片类型显示不同内容 -->
+      <view class="pet-banner" bindtap="onPetBannerTap">
+        <block wx:if="{{currentCard.type === 'pet'}}">
+          <!-- 已有宠物 -->
+          <image class="pet-image" src="{{currentCard.data.avatar || '/images/pet-default.png'}}" mode="aspectFill"></image>
+          <view class="pet-info-overlay">
+            <view class="pet-age">{{currentCard.data.age || 0}}个月</view>
+            <view class="pet-breed">{{currentCard.data.breed || '未知品种'}}</view>
+          </view>
+          <view class="pet-name-tag">{{currentCard.data.name || '宝贝'}}</view>
+        </block>
+        <block wx:else>
+          <!-- 添加宝贝卡片 -->
+          <image class="pet-image" src="/images/pet-add-bg.png" mode="aspectFill"></image>
+          <view class="add-pet-overlay" bindtap="goToAddPet">
+            <text class="add-icon">+</text>
+            <text class="add-text">添加宝贝信息</text>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <!-- ===== 三个功能按钮 ===== -->
+    <view class="action-buttons">
+      <view class="action-item" bindtap="goToRecord">
+        <view class="action-icon">📝</view>
+        <text class="action-text">记录宝贝</text>
+      </view>
+      
+      <view class="action-item" bindtap="onPetBannerTap">
+        <view class="action-icon">🐾</view>
+        <text class="action-text">{{currentCard.type === 'pet' ? currentCard.data.name : '宝贝关爱日历'}}</text>
+      </view>
+      
+      <view class="action-item" bindtap="goToAI">
+        <view class="action-icon">🤖</view>
+        <text class="action-text">AI健康助手</text>
+      </view>
+    </view>
+
+    <!-- ===== 日历区域 ===== -->
+    <view class="calendar-section">
+      <!-- 日历头部：全部按钮和月份切换 -->
+      <view class="calendar-header">
+        <view class="calendar-title">
+          <text class="month-year">{{displayYear}}年{{displayMonth}}月</text>
+        </view>
+        <view class="calendar-controls">
+          <view class="all-btn {{calendarMode === 'all' ? 'active' : ''}}" bindtap="switchCalendarMode">全部</view>
+          <view class="month-nav">
+            <text class="nav-arrow" bindtap="prevMonth">‹</text>
+            <text class="nav-arrow" bindtap="nextMonth">›</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 日历网格 -->
+      <view class="calendar-grid">
+        <!-- 星期行（周一到周日） -->
+        <view class="calendar-week">
+          <view class="week-item" wx:for="{{weekDays}}" wx:key="index">{{item}}</view>
+        </view>
+        
+        <!-- 日期行 - 使用grid 7列布局，保证星期正确对应 -->
+        <view class="calendar-dates">
+          <!-- 月模式：先填充空白格子，再填充日期 -->
+          <block wx:if="{{calendarMode === 'all'}}">
+            <!-- 填充月初空白格子 -->
+            <view class="date-item empty" wx:for="{{emptyCells}}" wx:key="index"></view>
+            
+            <!-- 填充当月日期 -->
+            <view class="date-item {{item.isToday ? 'today' : ''}} {{item.hasDeworm ? 'has-deworm' : ''}}"
+                  wx:for="{{calendarDates}}" wx:key="index"
+                  bindtap="onDateTap" data-date="{{item.date}}">
+              <view class="date-num {{item.isToday ? 'today-text' : ''}}">
+                <block wx:if="{{item.isToday}}">今天</block>
+                <block wx:elif="{{item.isFirstDay}}">{{item.month}}月</block>
+                <block wx:else>{{item.day}}</block>
+              </view>
+              <view class="deworm-dot" wx:if="{{item.hasDeworm}}"></view>
+            </view>
+          </block>
+          
+          <!-- 周模式：直接显示连续21天 -->
+          <block wx:else>
+            <view class="date-item {{item.isToday ? 'today' : ''}} {{item.hasDeworm ? 'has-deworm' : ''}}"
+                  wx:for="{{calendarDates}}" wx:key="index"
+                  bindtap="onDateTap" data-date="{{item.date}}">
+              <view class="date-num {{item.isToday ? 'today-text' : ''}}">
+                <block wx:if="{{item.isToday}}">今天</block>
+                <block wx:elif="{{item.isFirstDay}}">{{item.month}}月</block>
+                <block wx:else>{{item.day}}</block>
+              </view>
+              <view class="deworm-dot" wx:if="{{item.hasDeworm}}"></view>
+            </view>
+          </block>
+        </view>
+      </view>
+    </view>
+
+    <!-- ===== 关爱提醒区域 ===== -->
+    <view class="care-section">
+      <view class="care-header">
+        <text class="care-title">❤️ 关爱提醒</text>
+        <text class="care-more" bindtap="goToMoreCare">更多</text>
+      </view>
+      
+      <view class="care-content">
+        <block wx:if="{{currentCard.type === 'pet'}}">
+          <!-- 已有宠物：推荐门店 -->
+          <view class="care-message">该服务啦，已为您推荐附近的门店</view>
+          <view class="store-list">
+            <view class="store-item" wx:for="{{nearbyStores}}" wx:key="id" bindtap="goToStore" data-id="{{item.id}}">
+              <image class="store-image" src="{{item.image || '/images/store-default.png'}}" mode="aspectFill"></image>
+              <view class="store-info">
+                <view class="store-name">{{item.name}}</view>
+                <view class="store-distance">{{item.distance}}km</view>
+                <view class="store-address">{{item.address}}</view>
+              </view>
+            </view>
+          </view>
+          
+          <!-- 驱虫提醒 -->
+          <view class="deworm-reminder" wx:if="{{nextDewormDate}}" bindtap="goToDeworm">
+            <text class="reminder-icon">💊</text>
+            <text class="reminder-text">建议{{nextDewormDate}}进行{{nextDewormType}}驱虫</text>
+            <text class="reminder-arrow">›</text>
+          </view>
+        </block>
+        
+        <block wx:else>
+          <!-- 未添加宠物或当前是添加卡片：显示添加提醒 -->
+          <view class="empty-care">
+            <view class="care-message">更多关爱提醒，添加宠物信息后开启</view>
+            <view class="add-pet-btn" bindtap="goToAddPet">
+              <text class="add-icon">+</text>
+              <text class="add-text">添加宝贝</text>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <!-- ===== 驱虫计划入口 ===== -->
+    <view class="deworm-section" bindtap="goToDeworm">
+      <view class="deworm-left">
+        <text class="deworm-icon">💊</text>
+        <text class="deworm-title">驱虫计划</text>
+      </view>
+      <view class="deworm-right">
+        <text class="deworm-tip">{{dewormTip || '点击查看驱虫记录'}}</text>
+        <text class="deworm-arrow">›</text>
+      </view>
+    </view>
+
+    <!-- 底部留白 -->
+    <view class="bottom-space"></view>
+  </scroll-view>
+</view>

@@ -1,0 +1,78 @@
+{
+  "pages": [
+    
+    "pages/0/0login/login",
+    
+    "pages/1/1home/home",
+    "pages/1/2position/map",
+    "pages/1/3pets/pet",
+    "pages/1/4deworm/deworm",
+  
+    "pages/2/1shop/shop",
+
+    "pages/3/1services/services",
+
+    "pages/4/1news/news",
+    
+    "pages/5/1profile/profile",
+    "pages/5/2profile-edit/edit"
+  ],
+  
+  "window": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "宠物之家",
+    "navigationBarBackgroundColor": "#9575cd",
+    "backgroundColor": "#f8f4ff"
+  },
+  
+  "tabBar": {
+    "color": "#b39ddb",
+    "selectedColor": "#9575cd",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/1/1home/home",
+        "text": "首页",
+        "iconPath": "/images/三花猫.png",
+        "selectedIconPath": "/images/三花猫.png"
+      },
+      {
+        "pagePath": "pages/2/1shop/shop",
+        "text": "商城",
+        "iconPath": "/images/白猫.png",
+        "selectedIconPath": "/images/白猫.png"
+      },
+      {
+        "pagePath": "pages/3/1services/services",
+        "text": "服务",
+        "iconPath": "/images/柴犬.png",
+        "selectedIconPath": "/images/柴犬.png"
+      },
+      {
+        "pagePath": "pages/4/1news/news",
+        "text": "资讯",
+        "iconPath": "/images/羊.png",
+        "selectedIconPath": "/images/羊.png"
+      },
+      {
+        "pagePath": "pages/5/1profile/profile",
+        "text": "我的",
+        "iconPath": "/images/暹罗猫.png",
+        "selectedIconPath": "/images/暹罗猫.png"
+      }
+    ]
+  },
+  
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息用于展示当前定位"
+    }
+  },
+  
+  "requiredPrivateInfos": ["getLocation"],
+  "style": "v2",
+  "componentFramework": "glass-easel",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

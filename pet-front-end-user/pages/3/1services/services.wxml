@@ -1,0 +1,304 @@
+<!-- pages/3/1services/services.wxml -->
+<view class="page">
+  <!-- 自定义导航栏 -->
+  <view class="custom-navbar">
+    <view class="service-switch">
+      <view class="switch-item {{currentMainTab === 'appointment' ? 'active' : ''}}" bindtap="switchToAppointment">预约服务</view>
+      <view class="switch-item {{currentMainTab === 'order' ? 'active' : ''}}" bindtap="switchToOrder">我的订单</view>
+    </view>
+    <view class="navbar-right" bindtap="goToMessage">
+      <text class="icon">🔔</text>
+    </view>
+  </view>
+
+  <block wx:if="{{currentMainTab === 'appointment'}}">
+    <!-- 服务地址卡片 -->
+    <view class="location-card" bindtap="showAddressSelector">
+      <view class="location-icon">📍</view>
+      <view class="location-info">
+        <view class="location-label">服务地址</view>
+        <view class="location-address">{{selectedAddress ? selectedAddress.address : '请选择服务地址'}}</view>
+      </view>
+      <view class="location-arrow">›</view>
+    </view>
+
+    <!-- 服务宠物选择 -->
+    <view class="pet-selector" bindtap="goToPetManagement">
+      <view class="pet-info">
+        <view class="pet-avatar">
+          <text class="pet-avatar-text">{{selectedPet ? selectedPet.name.charAt(0) : '🐾'}}</text>
+        </view>
+        <view class="pet-detail">
+          <text class="pet-name">{{selectedPet ? selectedPet.name : '选择服务宠物'}}</text>
+          <text class="pet-type" wx:if="{{selectedPet}}">{{selectedPet.type}} · {{selectedPet.age}}岁</text>
+        </view>
+      </view>
+      <view class="pet-select-arrow">›</view>
+    </view>
+
+    <!-- 主内容区域 -->
+    <view class="main-content">
+      <scroll-view class="left-menu" scroll-y enhanced show-scrollbar="{{false}}">
+        <view class="menu-item {{currentLeftIndex === index ? 'active' : ''}}"
+              wx:for="{{leftMenuList}}" wx:key="index"
+              data-index="{{index}}"
+              bindtap="onLeftMenuTap">
+          <text>{{item.name}}</text>
+        </view>
+      </scroll-view>
+
+      <scroll-view class="right-content" scroll-y enhanced show-scrollbar="{{false}}">
+        <view class="section-list">
+          <block wx:for="{{leftMenuList}}" wx:key="index" wx:for-index="sectionIndex">
+            <view class="section" id="menu-{{sectionIndex}}">
+              <view class="section-title">{{item.name}}</view>
+              <view class="service-grid">
+                <view class="service-card" wx:for="{{item.services}}" wx:key="id" wx:for-item="service">
+                  <image class="service-image" src="{{service.image || '/images/service-default.png'}}" mode="aspectFill"></image>
+                  <view class="service-info">
+                    <view class="service-name">{{service.name}}</view>
+                    <view class="service-price-row">
+                      <view class="service-price">¥{{service.price}}</view>
+                      <view class="service-original" wx:if="{{service.originalPrice}}">¥{{service.originalPrice}}</view>
+                    </view>
+                    <view class="service-tag" wx:if="{{service.tag}}">{{service.tag}}</view>
+                    <button class="buy-btn" data-service="{{service}}" bindtap="showBuyModal">购买</button>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </block>
+          <view class="bottom-line">—— 我是有底线的 ——</view>
+        </view>
+      </scroll-view>
+    </view>
+  </block>
+
+  <!-- 我的订单 -->
+  <block wx:else>
+    <view class="order-page">
+      <view class="order-tabs">
+        <view class="tab-item {{currentOrderTab === 'mall' ? 'active' : ''}}" bindtap="switchToMallOrder">商城订单</view>
+        <view class="tab-item {{currentOrderTab === 'service' ? 'active' : ''}}" bindtap="switchToServiceOrder">服务订单</view>
+      </view>
+      <scroll-view class="order-list" scroll-y enhanced bindscrolltolower="loadMoreOrders">
+        
+        <!-- ========== 商城订单 ========== -->
+        <view wx:if="{{currentOrderTab === 'mall'}}">
+          <view wx:if="{{mallOrders.length === 0}}" class="empty-order">暂无商城订单</view>
+          <view wx:else>
+            <view class="order-card" wx:for="{{mallOrders}}" wx:key="id">
+              <view class="order-header">
+                <text class="order-shop">🐾 宠物商城</text>
+                <text class="order-status">{{item.statusText}}</text>
+              </view>
+              <view class="order-item" wx:for="{{item.items}}" wx:key="productId" wx:for-item="product">
+                <image class="order-item-image" src="{{product.image || '/images/goods-default.png'}}"></image>
+                <view class="order-item-info">
+                  <text class="order-item-name">{{product.name}}</text>
+                  <text class="order-item-price">¥{{product.price}} × {{product.quantity}}</text>
+                </view>
+              </view>
+              <view class="order-footer">
+                <text class="order-total">共{{item.totalCount}}件 实付 ¥{{item.totalAmount}}</text>
+                <view class="order-actions">
+                  <block wx:if="{{item.status === 0}}">
+                    <view class="action-btn primary" bindtap="payOrder" data-id="{{item.id}}" data-type="PRODUCT" data-amount="{{item.totalAmount}}">去付款</view>
+                  </block>
+                  <block wx:if="{{item.status === 2}}">
+                    <view class="action-btn primary" bindtap="confirmReceipt" data-id="{{item.id}}">确认收货</view>
+                  </block>
+                  <view class="action-btn" bindtap="showOrderDetail" data-order="{{item}}">查看详情</view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+        
+        <!-- ========== 服务订单 ========== -->
+        <view wx:elif="{{currentOrderTab === 'service'}}">
+          <view wx:if="{{serviceOrders.length === 0}}" class="empty-order">暂无服务订单</view>
+          <view wx:else>
+            <view class="order-card" wx:for="{{serviceOrders}}" wx:key="id">
+              <view class="order-header">
+                <text class="order-shop">🐕 宠物服务</text>
+                <text class="order-status">{{item.statusText}}</text>
+              </view>
+              <view class="order-item" wx:for="{{item.items}}" wx:key="id" wx:for-item="service">
+                <image class="order-item-image" src="{{service.image || '/images/service-default.png'}}"></image>
+                <view class="order-item-info">
+                  <text class="order-item-name">{{service.name}}</text>
+                  <text class="order-item-time">服务时间：{{item.serviceTime || '-'}}</text>
+                  <text class="order-item-price">¥{{service.price}} × {{service.quantity}}</text>
+                </view>
+              </view>
+              <view class="order-footer">
+                <text class="order-total">实付 ¥{{item.totalAmount}}</text>
+                <view class="order-actions">
+                  <block wx:if="{{item.status === 0}}">
+                    <view class="action-btn primary" bindtap="payOrder" data-id="{{item.id}}" data-type="SERVICE" data-amount="{{item.totalAmount}}">去付款</view>
+                  </block>
+                  <block wx:if="{{item.status === 10}}">
+                    <view class="action-btn disabled">等待商家确认</view>
+                  </block>
+                  <block wx:if="{{item.status === 11 || item.status === 12}}">
+                    <view class="action-btn" bindtap="cancelOrder" data-id="{{item.id}}">取消订单</view>
+                  </block>
+                  <view class="action-btn" bindtap="showOrderDetail" data-order="{{item}}">查看详情</view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+        
+      </scroll-view>
+    </view>
+  </block>
+
+  <!-- 订单详情弹窗 -->
+  <view class="modal-mask" wx:if="{{showOrderDetailModal}}" bindtap="hideOrderDetailModal"></view>
+  <view class="modal-container order-detail-modal {{showOrderDetailModal ? 'show' : ''}}" wx:if="{{showOrderDetailModal}}">
+    <view class="modal-header">
+      <text class="modal-title">订单详情</text>
+      <text class="modal-close" bindtap="hideOrderDetailModal">×</text>
+    </view>
+    <scroll-view class="modal-body" scroll-y>
+      <view class="detail-section">
+        <view class="detail-row"><text class="detail-label">订单号：</text><text class="detail-value">{{orderDetail.orderNo}}</text></view>
+        <view class="detail-row"><text class="detail-label">订单状态：</text><text class="detail-value">{{orderDetail.statusText}}</text></view>
+        <view class="detail-row"><text class="detail-label">总金额：</text><text class="detail-value price">¥{{orderDetail.totalAmount}}</text></view>
+        <view class="detail-row"><text class="detail-label">创建时间：</text><text class="detail-value">{{orderDetail.createTime}}</text></view>
+        <view class="detail-row" wx:if="{{orderDetail.payTime}}"><text class="detail-label">支付时间：</text><text class="detail-value">{{orderDetail.payTime}}</text></view>
+        <view class="detail-row" wx:if="{{orderDetail.serviceTime}}"><text class="detail-label">服务时间：</text><text class="detail-value">{{orderDetail.serviceTime}}</text></view>
+        <view class="detail-row" wx:if="{{orderDetail.receiverAddress}}"><text class="detail-label">收货地址：</text><text class="detail-value">{{orderDetail.receiverAddress}}</text></view>
+        <view class="detail-row" wx:if="{{orderDetail.receiverName}}"><text class="detail-label">收货人：</text><text class="detail-value">{{orderDetail.receiverName}} {{orderDetail.receiverPhone}}</text></view>
+        <view class="detail-divider"></view>
+        <view class="detail-title">商品信息</view>
+        <view class="detail-product" wx:for="{{orderDetail.items}}" wx:key="id">
+          <image class="detail-product-img" src="{{item.image || '/images/default.png'}}"></image>
+          <view class="detail-product-info">
+            <text class="detail-product-name">{{item.name}}</text>
+            <text class="detail-product-price">¥{{item.price}} × {{item.quantity}} = ¥{{item.totalPrice}}</text>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+    <view class="modal-footer">
+      <button class="modal-btn cancel" bindtap="hideOrderDetailModal">关闭</button>
+    </view>
+  </view>
+
+  <!-- 地址选择弹窗 -->
+  <view class="modal-mask" wx:if="{{showAddressModal}}" bindtap="hideAddressModal"></view>
+  <view class="modal-container {{showAddressModal ? 'show' : ''}}" wx:if="{{showAddressModal}}">
+    <view class="modal-header">
+      <text class="modal-title">选择服务地址</text>
+      <text class="modal-close" bindtap="hideAddressModal">×</text>
+    </view>
+    <scroll-view class="modal-body" scroll-y>
+      <view class="address-item {{item.id === selectedAddress.id ? 'active' : ''}}" 
+            wx:for="{{addressList}}" wx:key="id"
+            bindtap="selectAddress" data-id="{{item.id}}">
+        <view class="address-info">
+          <text class="address-name">{{item.name}}</text>
+          <text class="address-phone">{{item.phone}}</text>
+        </view>
+        <view class="address-detail">{{item.address}}</view>
+        <view class="address-check" wx:if="{{item.id === selectedAddress.id}}">✓</view>
+        <text class="address-delete" catchtap="deleteAddress" data-id="{{item.id}}">×</text>
+      </view>
+    </scroll-view>
+    <view class="add-address-btn" bindtap="showAddAddress">+ 新增服务地址</view>
+    <view class="modal-footer" bindtap="hideAddressModal">取消</view>
+  </view>
+
+  <!-- 新增地址弹窗 -->
+  <view class="modal-mask" wx:if="{{showAddAddressModal}}" bindtap="hideAddAddressModal"></view>
+  <view class="modal-container {{showAddAddressModal ? 'show' : ''}}" wx:if="{{showAddAddressModal}}">
+    <view class="modal-header">
+      <text class="modal-title">新增地址</text>
+      <text class="modal-close" bindtap="hideAddAddressModal">×</text>
+    </view>
+    <view class="modal-body">
+      <input class="form-input" placeholder="联系人姓名" value="{{newAddress.name}}" bindinput="onAddressNameInput"/>
+      <input class="form-input" type="number" placeholder="联系电话" value="{{newAddress.phone}}" bindinput="onAddressPhoneInput"/>
+      <input class="form-input" placeholder="详细地址" value="{{newAddress.address}}" bindinput="onAddressDetailInput"/>
+    </view>
+    <view class="modal-footer">
+      <button class="modal-btn cancel" bindtap="hideAddAddressModal">取消</button>
+      <button class="modal-btn confirm" bindtap="saveNewAddress">保存</button>
+    </view>
+  </view>
+
+  <!-- 宠物选择弹窗 -->
+  <view class="modal-mask" wx:if="{{showPetModal}}" bindtap="hidePetModal"></view>
+  <view class="modal-container {{showPetModal ? 'show' : ''}}" wx:if="{{showPetModal}}">
+    <view class="modal-header">
+      <text class="modal-title">选择宠物</text>
+      <text class="modal-close" bindtap="hidePetModal">×</text>
+    </view>
+    <view class="modal-body">
+      <view class="pet-item" wx:for="{{petList}}" wx:key="id" data-pet="{{item}}" bindtap="selectPet">
+        <view class="pet-avatar-small">{{item.name.charAt(0)}}</view>
+        <view class="pet-info-small">
+          <text class="pet-name-small">{{item.name}}</text>
+          <text class="pet-type-small">{{item.type}} · {{item.age}}岁</text>
+        </view>
+        <view class="pet-check" wx:if="{{selectedPetId === item.id}}">✓</view>
+      </view>
+      <view class="add-pet-btn" bindtap="goToAddPet">+ 添加新宠物</view>
+    </view>
+  </view>
+
+  <!-- 购买弹窗 -->
+  <view class="modal-mask" wx:if="{{showBuyModal}}" bindtap="hideBuyModal"></view>
+  <view class="modal-container {{showBuyModal ? 'show' : ''}}" wx:if="{{showBuyModal}}">
+    <view class="modal-header">
+      <text class="modal-title">确认购买</text>
+      <text class="modal-close" bindtap="hideBuyModal">×</text>
+    </view>
+    <view class="modal-body">
+      <view class="service-info-card">
+        <image class="service-info-img" src="{{buyService.image}}"></image>
+        <view class="service-info-detail">
+          <text class="service-info-name">{{buyService.name}}</text>
+          <text class="service-info-price">¥{{buyService.price}}</text>
+        </view>
+      </view>
+      
+      <view class="form-item">
+        <text class="form-label">服务日期</text>
+        <picker mode="date" value="{{serviceDate}}" start="{{minDate}}" bindchange="onDateChange">
+          <view class="form-picker">{{serviceDate || '请选择日期'}}</view>
+        </picker>
+      </view>
+      
+      <view class="form-item">
+        <text class="form-label">服务时间</text>
+        <view class="time-options">
+          <view class="time-option {{selectedTimeIndex === 0 ? 'active' : ''}}" bindtap="selectTime" data-index="0">上午</view>
+          <view class="time-option {{selectedTimeIndex === 1 ? 'active' : ''}}" bindtap="selectTime" data-index="1">下午</view>
+          <view class="time-option {{selectedTimeIndex === 2 ? 'active' : ''}}" bindtap="selectTime" data-index="2">晚上</view>
+        </view>
+      </view>
+      
+      <view class="form-item">
+        <text class="form-label">购买数量</text>
+        <view class="quantity-control">
+          <view class="quantity-btn" bindtap="decreaseQuantity">-</view>
+          <text class="quantity-num">{{quantity}}</text>
+          <view class="quantity-btn" bindtap="increaseQuantity">+</view>
+        </view>
+      </view>
+      
+      <view class="total-section">
+        <text class="total-label">总计：</text>
+        <text class="total-price">¥{{totalPrice}}</text>
+      </view>
+    </view>
+    <view class="modal-footer">
+      <button class="modal-btn cancel" bindtap="hideBuyModal">取消</button>
+      <button class="modal-btn confirm" bindtap="confirmBuy">确认购买</button>
+    </view>
+  </view>
+</view>

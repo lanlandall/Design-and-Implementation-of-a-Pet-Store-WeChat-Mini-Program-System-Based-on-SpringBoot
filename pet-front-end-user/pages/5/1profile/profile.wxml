@@ -1,0 +1,180 @@
+<!-- pages/5/1profile/profile.wxml -->
+<view class="page">
+  <!-- 自定义导航栏 -->
+  <view class="custom-navbar">
+    <view class="navbar-title">个人中心</view>
+    <view class="navbar-right" bindtap="showActionSheet">
+      <text class="icon">⚙️</text>
+    </view>
+  </view>
+
+  <scroll-view class="main-scroll" scroll-y="{{true}}" enhanced refresher-enabled="{{true}}" 
+               refresher-triggered="{{refreshing}}" bindrefresherrefresh="onRefresh"
+               bindscrolltolower="loadMore">
+    
+    <!-- ===== 用户信息区域 ===== -->
+    <view class="user-section">
+      <view class="user-info" bindtap="goToProfileEdit">
+        <image class="user-avatar" src="{{userInfo.avatar || 'https://gd-hbimg.huaban.com/3d08684c78c6bef02339f8be1ba7e1d64f6dcfd828ba-nTzqqR_fw658'}}" mode="aspectFill"></image>
+        <view class="user-detail">
+          <text class="user-name">{{userInfo.nickName || '点击登录'}}</text>
+          <text class="user-phone" wx:if="{{userInfo.phone}}">{{userInfo.phone}}</text>
+        </view>
+      </view>
+      <view class="membership-code">
+        <text class="code-label">会员码</text>
+        <text class="code-arrow">›</text>
+      </view>
+    </view>
+
+    <!-- ===== 资产统计卡片 ===== -->
+    <view class="assets-section">
+      <view class="asset-item" bindtap="goToCardPack">
+        <view class="asset-value">
+          <text class="number">{{userAssets.cardCount || 0}}</text>
+          <text class="unit">张</text>
+        </view>
+        <text class="asset-label">卡包</text>
+      </view>
+      <view class="asset-divider"></view>
+      <view class="asset-item" bindtap="goToServiceVoucher">
+        <view class="asset-value">
+          <text class="number">{{userAssets.voucherCount || 0}}</text>
+          <text class="unit">张</text>
+        </view>
+        <text class="asset-label">储值</text>
+      </view>
+      <view class="asset-divider"></view>
+      <view class="asset-item" bindtap="goToCanCoin">
+        <view class="asset-value">
+          <text class="number">{{userAssets.coinCount || 0}}</text>
+          <text class="unit">个</text>
+        </view>
+        <text class="asset-label">罐头币</text>
+      </view>
+      <view class="asset-divider"></view>
+      <view class="asset-item" bindtap="goToGiftVoucher">
+        <view class="asset-value">
+          <text class="number">{{userAssets.giftCount || 0}}</text>
+          <text class="unit">张</text>
+        </view>
+        <text class="asset-label">商品券</text>
+      </view>
+    </view>
+
+    <!-- ===== 我的宠物入口 ===== -->
+    <view class="menu-section">
+      <view class="menu-header">
+        <text class="menu-title">我的宠物</text>
+        <view class="menu-more" bindtap="goToAddPet">
+          <text>查看全部</text>
+          <text class="arrow">›</text>
+        </view>
+      </view>
+      <scroll-view class="pet-list" scroll-x="{{true}}" show-scrollbar="{{false}}">
+        <view class="pet-scroll">
+          <view class="pet-item" wx:for="{{myPets}}" wx:key="id" bindtap="goToPetDetail" data-id="{{item.id}}">
+            <image class="pet-avatar" src="{{item.avatar || '/images/pet-default.png'}}" mode="aspectFill"></image>
+            <text class="pet-name">{{item.name}}</text>
+          </view>
+          <view class="pet-item add-pet" bindtap="goToAddPet">
+            <view class="add-icon">+</view>
+            <text class="pet-name">添加宠物</text>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- ===== 功能菜单列表 ===== -->
+    <view class="menu-section">
+      <view class="menu-header">
+        <text class="menu-title">常用功能</text>
+      </view>
+      
+      <!-- 第一行：两个功能 -->
+      <view class="menu-grid">
+        <view class="menu-grid-item" bindtap="goToPetUpdates">
+          <view class="menu-icon">🐾</view>
+          <text class="menu-label">养宠动态</text>
+        </view>
+        <view class="menu-grid-item" bindtap="goToMyReview">
+          <view class="menu-icon">⭐</view>
+          <text class="menu-label">我的评价</text>
+        </view>
+      </view>
+      
+      <!-- 第二行：两个功能 -->
+      <view class="menu-grid">
+        <view class="menu-grid-item" bindtap="goToBill">
+          <view class="menu-icon">📋</view>
+          <text class="menu-label">账单</text>
+        </view>
+        <view class="menu-grid-item" bindtap="goToBillQuery">
+          <view class="menu-icon">🔍</view>
+          <text class="menu-label">发票查询</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- ===== 更多服务列表 ===== -->
+    <view class="list-section">
+      <view class="list-item" bindtap="goToFeedback">
+        <view class="item-left">
+          <text class="item-icon">💬</text>
+          <text class="item-label">反馈与建议</text>
+        </view>
+        <text class="item-arrow">›</text>
+      </view>
+      
+      <view class="list-item" bindtap="goToContact">
+        <view class="item-left">
+          <text class="item-icon">📞</text>
+          <text class="item-label">联系客服</text>
+        </view>
+        <text class="item-arrow">›</text>
+      </view>
+      
+      <view class="list-item" bindtap="goToMore">
+        <view class="item-left">
+          <text class="item-icon">⋯</text>
+          <text class="item-label">更多</text>
+        </view>
+        <text class="item-arrow">›</text>
+      </view>
+    </view>
+
+    <!-- 底部留白 -->
+    <view class="bottom-space"></view>
+  </scroll-view>
+
+  <!-- 底部操作菜单 -->
+  <view class="modal-mask" wx:if="{{showActionSheet}}" bindtap="hideActionSheet"></view>
+<view class="action-sheet {{showActionSheet ? 'show' : ''}}">
+  <view class="action-item" bindtap="showSwitchAccount">
+    <text>切换账号</text>
+  </view>
+  <view class="action-item" bindtap="handleLogout">
+    <text style="color:#e74c3c;">退出登录</text>
+  </view>
+  <view class="action-footer" bindtap="hideActionSheet">
+    <text>取消</text>
+  </view>
+</view>
+<!-- 切换账号弹窗 -->
+<view class="modal-mask" wx:if="{{showAccountModal}}" bindtap="hideModal"></view>
+<view class="action-sheet {{showAccountModal ? 'show' : ''}}">
+  <view class="modal-header">
+    <text>切换账号</text>
+  </view>
+  
+  <view class="account-item" wx:for="{{accountList}}" wx:key="userId">
+    <view class="account-info" bindtap="switchAccount" data-id="{{item.userId}}">
+      <text>{{item.nickname}} {{item.userId == currentUserId ? '✓' : ''}}</text>
+    </view>
+    <text class="delete-btn" catchtap="deleteAccount" data-id="{{item.userId}}">✕</text>
+  </view>
+  
+  <view class="add-btn" bindtap="addAccount">+ 添加账号</view>
+  <view class="cancel-btn" bindtap="hideModal">取消</view>
+</view>
+</view>

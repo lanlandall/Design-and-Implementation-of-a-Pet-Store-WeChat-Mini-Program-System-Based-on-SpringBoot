@@ -1,0 +1,140 @@
+<!--pages/1/4deworm/deworm.wxml-->
+<view class="page">
+  <!-- 顶部导航栏 -->
+  <view class="custom-navbar">
+    <view class="back-btn" bindtap="goBack">
+      <text class="back-icon">←</text>
+    </view>
+    <view class="navbar-title">驱虫计划</view>
+    <view class="navbar-right" bindtap="goToRecord">
+      <text class="record-icon">📋</text>
+    </view>
+  </view>
+
+  <!-- 宠物选择器 -->
+  <view class="pet-selector" bindtap="showPetSelector">
+    <view class="pet-avatar">{{currentPet ? currentPet.name.charAt(0) : '🐾'}}</view>
+    <view class="pet-info">
+      <text class="pet-name">{{currentPet ? currentPet.name : '选择宠物'}}</text>
+      <text class="pet-type" wx:if="{{currentPet}}">{{currentPet.type}} · {{currentPet.age}}岁</text>
+    </view>
+    <view class="pet-arrow">▼</view>
+  </view>
+
+  <!-- 驱虫统计卡片 -->
+  <view class="stats-card">
+    <view class="stats-item">
+      <text class="stats-number">{{dewormCount}}</text>
+      <text class="stats-label">总驱虫次数</text>
+    </view>
+    <view class="stats-divider"></view>
+    <view class="stats-item">
+      <text class="stats-number">{{nextDewormDays}}</text>
+      <text class="stats-label">距下次驱虫(天)</text>
+    </view>
+    <view class="stats-divider"></view>
+    <view class="stats-item">
+      <text class="stats-number">{{dewormRate}}%</text>
+      <text class="stats-label">按时完成率</text>
+    </view>
+  </view>
+
+  <!-- 驱虫记录列表 -->
+  <view class="section-header">
+    <text class="section-title">驱虫记录</text>
+    <view class="add-btn" bindtap="addDewormRecord">
+      <text class="add-icon">+</text>
+      <text>添加记录</text>
+    </view>
+  </view>
+
+  <scroll-view class="record-list" scroll-y enhanced show-scrollbar="{{false}}">
+    <view wx:if="{{dewormRecords.length === 0}}" class="empty-state">
+      <text class="empty-icon">💊</text>
+      <text class="empty-text">暂无驱虫记录</text>
+      <text class="empty-hint">点击上方按钮添加驱虫记录</text>
+    </view>
+
+    <view class="record-card" wx:for="{{dewormRecords}}" wx:key="id">
+      <view class="record-header">
+        <view class="record-type {{item.type === '体内' ? 'type-in' : 'type-out'}}">
+          <text>{{item.type}}</text>
+        </view>
+        <text class="record-date">{{item.dewormDate}}</text>
+        <view class="record-actions">
+          <text class="edit-btn" data-id="{{item.id}}" catchtap="editRecord">✏️</text>
+          <text class="delete-btn" data-id="{{item.id}}" catchtap="deleteRecord">×</text>
+        </view>
+      </view>
+      <view class="record-body">
+        <view class="record-row" wx:if="{{item.medicine}}">
+          <text class="row-label">药品</text>
+          <text class="row-value">{{item.medicine}}</text>
+        </view>
+        <view class="record-row">
+          <text class="row-label">下次驱虫</text>
+          <text class="row-value">{{item.nextDewormDate || '未设置'}}</text>
+        </view>
+        <view class="record-row" wx:if="{{item.remark}}">
+          <text class="row-label">备注</text>
+          <text class="row-value">{{item.remark}}</text>
+        </view>
+      </view>
+      <view class="record-footer">
+        <view class="days-badge" wx:if="{{item.daysUntilNext > 0}}">
+          <text>距下次 {{item.daysUntilNext}} 天</text>
+        </view>
+        <view class="days-badge overdue" wx:if="{{item.daysUntilNext < 0}}">
+          <text>已过期 {{Math.abs(item.daysUntilNext)}} 天</text>
+        </view>
+        <view class="days-badge today" wx:if="{{item.daysUntilNext === 0}}">
+          <text>今日驱虫</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="bottom-tip" wx:if="{{dewormRecords.length > 0}}">—— 没有更多了 ——</view>
+  </scroll-view>
+
+  <!-- 添加/编辑驱虫记录弹窗 -->
+  <view class="modal-mask" wx:if="{{showModal}}" bindtap="closeModal"></view>
+  <view class="modal-container {{showModal ? 'show' : ''}}">
+    <view class="modal-header">
+      <text class="modal-title">{{isEdit ? '编辑驱虫记录' : '添加驱虫记录'}}</text>
+      <text class="modal-close" bindtap="closeModal">×</text>
+    </view>
+    <scroll-view class="modal-body" scroll-y>
+      <view class="form-group">
+        <label>驱虫类型</label>
+        <view class="type-switch">
+          <view class="type-option {{formData.type === '体内' ? 'active' : ''}}" bindtap="selectType" data-type="体内">体内驱虫</view>
+          <view class="type-option {{formData.type === '体外' ? 'active' : ''}}" bindtap="selectType" data-type="体外">体外驱虫</view>
+        </view>
+      </view>
+      <view class="form-group">
+        <label>驱虫日期</label>
+        <picker mode="date" value="{{formData.dewormDate}}" bindchange="onDateChange">
+          <view class="form-picker">{{formData.dewormDate || '请选择日期'}}</view>
+        </picker>
+      </view>
+      <view class="form-group">
+        <label>下次驱虫日期（可选）</label>
+        <picker mode="date" value="{{formData.nextDewormDate}}" bindchange="onNextDateChange">
+          <view class="form-picker">{{formData.nextDewormDate || '暂不设置'}}</view>
+        </picker>
+      </view>
+      <view class="form-group">
+        <label>药品名称</label>
+        <input class="form-input" placeholder="如：拜耳、福来恩" value="{{formData.medicine}}" bindinput="onMedicineInput" />
+      </view>
+      <view class="form-group">
+        <label>备注</label>
+        <textarea class="form-textarea" placeholder="备注信息" value="{{formData.remark}}" bindinput="onRemarkInput" />
+      </view>
+    </scroll-view>
+    <view class="modal-footer">
+      <button class="modal-btn cancel" bindtap="closeModal">取消</button>
+      <button class="modal-btn confirm" bindtap="saveDewormRecord">保存</button>
+    </view>
+  </view>
+</view>

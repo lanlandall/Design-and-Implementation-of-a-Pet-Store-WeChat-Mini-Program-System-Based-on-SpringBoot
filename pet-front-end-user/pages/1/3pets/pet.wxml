@@ -1,0 +1,108 @@
+<!-- pages/1/3pets/pet.wxml -->
+<view class="page">
+  <!-- 导航栏 -->
+  <view class="navbar">
+    <view class="navbar-back" bindtap="goBack">
+      <text class="back-icon">←</text>
+    </view>
+    <view class="navbar-title">管理宠物</view>
+    <view class="navbar-add" bindtap="showAddModal">
+      <text class="add-icon">+</text>
+    </view>
+  </view>
+
+  <!-- 宠物列表 -->
+  <view class="pet-list" wx:if="{{petList.length > 0}}">
+    <view class="pet-card" wx:for="{{petList}}" wx:key="id">
+      <view class="pet-avatar" style="background: {{item.avatarColor || '#9b59b6'}}">
+        <text class="avatar-text">{{item.name.charAt(0)}}</text>
+      </view>
+      <view class="pet-info">
+        <view class="pet-name">{{item.name}}</view>
+        <view class="pet-detail">
+          <text class="pet-type">{{item.type || '狗狗'}}</text>
+          <text class="pet-age">{{item.age}}个月</text>
+          <text class="pet-breed">{{item.breed || '未填写'}}</text>
+        </view>
+        <view class="pet-weight" wx:if="{{item.weight}}">体重：{{item.weight}} kg</view>
+      </view>
+      <view class="pet-actions">
+        <view class="action-btn edit" data-id="{{item.id}}" catchtap="showEditModal">编辑</view>
+        <view class="action-btn delete" data-id="{{item.id}}" catchtap="deletePet">删除</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:else>
+    <image class="empty-image" src="/images/empty-pet.png" mode="aspectFit"></image>
+    <text class="empty-text">暂无宠物</text>
+    <text class="empty-desc">点击右上角+添加你的第一个宠物</text>
+  </view>
+
+  <!-- 底部提示 -->
+  <view class="bottom-tip" wx:if="{{petList.length > 0}}">
+    <text>共 {{petList.length}} 只宠物</text>
+  </view>
+</view>
+
+<!-- 添加/编辑宠物弹窗 -->
+<view class="modal-mask" wx:if="{{showModal}}" bindtap="closeModal">
+  <view class="modal-container" catchtap="stopPropagation">
+    <view class="modal-header">
+      <text class="modal-title">{{modalTitle}}</text>
+      <text class="modal-close" bindtap="closeModal">×</text>
+    </view>
+    <view class="modal-body">
+      <view class="form-item">
+        <text class="form-label">宠物名称</text>
+        <input class="form-input" placeholder="请输入宠物名称" value="{{formData.name}}" bindinput="onNameInput" />
+      </view>
+      <view class="form-item">
+        <text class="form-label">宠物类型</text>
+        <picker mode="selector" range="{{typeList}}" value="{{typeIndex}}" bindchange="onTypeChange">
+          <view class="form-picker">{{typeList[typeIndex] || '请选择'}}</view>
+        </picker>
+      </view>
+      <view class="form-item">
+        <text class="form-label">品种</text>
+        <input class="form-input" placeholder="请输入品种" value="{{formData.breed}}" bindinput="onBreedInput" />
+      </view>
+      <view class="form-item">
+        <text class="form-label">年龄(月)</text>
+        <input class="form-input" type="number" placeholder="请输入年龄" value="{{formData.age}}" bindinput="onAgeInput" />
+      </view>
+      <view class="form-item">
+        <text class="form-label">体重(kg)</text>
+        <input class="form-input" type="digit" placeholder="请输入体重" value="{{formData.weight}}" bindinput="onWeightInput" />
+      </view>
+      <view class="form-item">
+        <text class="form-label">生日</text>
+        <picker mode="date" value="{{formData.birthday}}" bindchange="onBirthdayChange">
+          <view class="form-picker">{{formData.birthday || '请选择'}}</view>
+        </picker>
+      </view>
+    </view>
+    <view class="modal-footer">
+      <button class="modal-btn cancel" bindtap="closeModal">取消</button>
+      <button class="modal-btn confirm" bindtap="savePet">保存</button>
+    </view>
+  </view>
+</view>
+
+<!-- 删除确认弹窗 -->
+<view class="modal-mask" wx:if="{{showDeleteModal}}" bindtap="closeDeleteModal">
+  <view class="modal-container delete-modal" catchtap="stopPropagation">
+    <view class="modal-header">
+      <text class="modal-title">删除宠物</text>
+    </view>
+    <view class="modal-body">
+      <text class="delete-text">确定要删除宠物"{{deletePetName}}"吗？</text>
+      <text class="delete-desc">删除后无法恢复，请谨慎操作</text>
+    </view>
+    <view class="modal-footer">
+      <button class="modal-btn cancel" bindtap="closeDeleteModal">取消</button>
+      <button class="modal-btn confirm delete" bindtap="confirmDelete">确认删除</button>
+    </view>
+  </view>
+</view>

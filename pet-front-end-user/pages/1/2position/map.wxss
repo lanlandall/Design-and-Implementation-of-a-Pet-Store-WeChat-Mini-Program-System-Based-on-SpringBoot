@@ -1,0 +1,236 @@
+/* pages/1/2position/map.wxss */
+.page {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: #f8f4ff;
+}
+
+/* 顶部导航栏 */
+.custom-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 88rpx;
+  background: linear-gradient(135deg, #b39ddb, #9575cd);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30rpx;
+  z-index: 100;
+  padding-top: env(safe-area-inset-top);
+}
+
+.back-btn {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-icon {
+  font-size: 40rpx;
+  color: white;
+  font-weight: bold;
+}
+
+.navbar-title {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: white;
+}
+
+.navbar-right {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.refresh-icon {
+  font-size: 36rpx;
+  color: white;
+}
+
+/* 地图容器 */
+.map-container {
+  flex: 1;
+  width: 100%;
+}
+
+/* 底部信息栏 */
+.bottom-info {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 32rpx 32rpx 0 0;
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.08);
+  z-index: 50;
+  padding: 20rpx 30rpx;
+}
+
+.location-info {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 1rpx solid #ede7f6;
+}
+
+.location-dot {
+  font-size: 32rpx;
+}
+
+.location-text {
+  flex: 1;
+  font-size: 28rpx;
+  color: #5e4b8c;
+  font-weight: 500;
+}
+
+.shop-list-btn {
+  padding-top: 16rpx;
+  text-align: center;
+  font-size: 26rpx;
+  color: #b39ddb;
+}
+
+/* 附近门店列表 */
+.shop-list {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 32rpx 32rpx 0 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  z-index: 60;
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.1);
+}
+
+.shop-list.show {
+  max-height: 60vh;
+}
+
+.shop-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24rpx 30rpx 16rpx;
+  border-bottom: 1rpx solid #ede7f6;
+}
+
+.shop-header-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #5e4b8c;
+}
+
+.shop-header-count {
+  font-size: 24rpx;
+  color: #b39ddb;
+}
+
+.shop-scroll {
+  max-height: 50vh;
+  padding: 0 30rpx;
+}
+
+.shop-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #f0eaf8;
+}
+
+.shop-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  background: linear-gradient(135deg, #e1d9f0, #d1c4e9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  margin-right: 20rpx;
+}
+
+.shop-info {
+  flex: 1;
+}
+
+.shop-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #4a4a5a;
+  margin-bottom: 8rpx;
+  display: block;
+}
+
+.shop-address {
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 8rpx;
+  display: block;
+}
+
+.shop-tags {
+  display: flex;
+  gap: 16rpx;
+}
+
+.tag {
+  font-size: 22rpx;
+  color: #b39ddb;
+  background: #f8f4ff;
+  padding: 4rpx 12rpx;
+  border-radius: 20rpx;
+}
+
+.shop-arrow {
+  font-size: 32rpx;
+  color: #ccc;
+}
+
+/* 加载遮罩 */
+.loading-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20rpx;
+  z-index: 200;
+}
+
+.loading-spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 4rpx solid #ede7f6;
+  border-top-color: #9575cd;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-mask text {
+  color: white;
+  font-size: 28rpx;
+}

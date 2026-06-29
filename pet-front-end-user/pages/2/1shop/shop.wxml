@@ -1,0 +1,202 @@
+<!-- pages/2/1shop/shop.wxml -->
+<view class="page">
+  <!-- 自定义导航栏 -->
+  <view class="custom-navbar">
+    <view class="pet-switch">
+      <view class="switch-item {{petType === 1 ? 'active' : ''}}" bindtap="switchToDog">🐕 汪星人</view>
+      <view class="switch-item {{petType === 2 ? 'active' : ''}}" bindtap="switchToCat">🐈 喵星人</view>
+    </view>
+    <!-- 搜索框 - 当前界面搜索 -->
+    <view class="search-box" bindtap="onSearchFocus">
+      <text class="search-icon">🔍</text>
+      <input 
+        class="search-input" 
+        placeholder="搜索商品..." 
+        value="{{searchKeyword}}"
+        bindinput="onSearchInput"
+        bindconfirm="onSearchConfirm"
+        confirm-type="search"
+      />
+    </view>
+    <view class="navbar-placeholder"></view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-container" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <block wx:else>
+    <!-- 一级分类栏 -->
+    <view class="category-bar">
+      <!-- 综合按钮 -->
+      <view class="category-fixed left {{currentCategoryId === 0 ? 'active-fixed' : ''}}" bindtap="onComprehensive">综合</view>
+      
+      <!-- 分类滚动区域 -->
+      <scroll-view class="category-scroll" scroll-x="true" show-scrollbar="{{false}}" scroll-left="{{scrollLeft}}">
+        <view class="scroll-inner">
+          <block wx:if="{{petType === 1}}">
+            <view class="category-item {{currentCategoryId === item.id ? 'active-category' : ''}}" 
+                  wx:for="{{dogCategoryList}}" wx:key="id" 
+                  bindtap="onCategoryTap" 
+                  data-id="{{item.id}}" 
+                  data-name="{{item.name}}">
+              {{item.name}}
+            </view>
+          </block>
+          <block wx:else>
+            <view class="category-item {{currentCategoryId === item.id ? 'active-category' : ''}}" 
+                  wx:for="{{catCategoryList}}" wx:key="id" 
+                  bindtap="onCategoryTap" 
+                  data-id="{{item.id}}" 
+                  data-name="{{item.name}}">
+              {{item.name}}
+            </view>
+          </block>
+        </view>
+      </scroll-view>
+      
+      <navigator url="/pages/2/3classification/classification" class="category-fixed right" hover-class="none">
+        <text>分类</text>
+        <text class="arrow">›</text>
+      </navigator>
+    </view>
+
+    <!-- 商品列表区域 -->
+    <view class="goods-container">
+      <!-- 商品网格 -->
+      <view class="goods-grid">
+        <view class="goods-item" wx:for="{{goodsList}}" wx:key="id" wx:for-item="item" bindtap="goToDetail" data-id="{{item.id}}">
+          <image class="goods-image" src="{{item.image || defaultImageUrl}}" mode="aspectFill" lazy-load="true" binderror="onImageError" data-index="{{index}}"></image>
+          <view class="goods-info">
+            <view class="goods-name">{{item.name}}</view>
+            <view class="goods-price-wrap">
+              <text class="goods-price">¥{{item.price}}</text>
+              <text class="goods-original-price" wx:if="{{item.originalPrice}}">¥{{item.originalPrice}}</text>
+            </view>
+            <view class="goods-footer">
+              <text class="goods-sales">已售 {{item.sales || 0}}</text>
+              <view class="add-cart-btn" bindtap="buyNow" data-id="{{item.id}}" data-name="{{item.name}}" data-price="{{item.price}}" data-stock="{{item.stock}}" catchtap>
+                <text class="cart-icon">+</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 商城订单（悬浮） -->
+      <view class="publish-btn" bindtap="goToShopOrders">
+        <text class="publish-icon">📋</text>
+      </view>
+
+      <!-- 空状态 -->
+      <view class="empty-state" wx:if="{{goodsList.length === 0 && !loading}}">
+        <image class="empty-image" src="{{emptyImageUrl}}" mode="widthFix"></image>
+        <text>暂无商品</text>
+      </view>
+
+      <!-- 加载更多 -->
+      <view class="load-more" wx:if="{{loadingMore}}">
+        <view class="loading-spinner small"></view>
+        <text>加载中...</text>
+      </view>
+
+      <!-- 没有更多 -->
+      <view class="no-more" wx:if="{{!hasMore && goodsList.length > 0}}">
+        <text>—— 没有更多了 ——</text>
+      </view>
+    </view>
+  </block>
+
+  <!-- ========== 购买弹窗 ========== -->
+  <view class="modal-mask" wx:if="{{showBuyModal}}" bindtap="hideBuyModal"></view>
+  <view class="modal-container" wx:if="{{showBuyModal}}" catchtap="stopPropagation">
+    <view class="modal-header">
+      <text class="modal-title">确认购买</text>
+      <text class="modal-close" bindtap="hideBuyModal">×</text>
+    </view>
+    <view class="modal-body">
+      <view class="product-info-card">
+        <image class="product-info-img" src="{{buyProduct.image || defaultImageUrl}}"></image>
+        <view class="product-info-detail">
+          <text class="product-info-name">{{buyProduct.name}}</text>
+          <text class="product-info-price">¥{{buyProduct.price}}</text>
+        </view>
+      </view>
+      
+      <!-- 选择地址 -->
+      <view class="address-selector" bindtap="showAddressSelector">
+        <text class="address-label">收货地址</text>
+        <view class="address-info">
+          <text class="address-detail">{{selectedAddress ? selectedAddress.address : '请选择收货地址'}}</text>
+          <text class="address-arrow">›</text>
+        </view>
+      </view>
+      <view class="address-contact" wx:if="{{selectedAddress}}">
+        <text>{{selectedAddress.name}} {{selectedAddress.phone}}</text>
+      </view>
+      
+      <!-- 购买数量 -->
+      <view class="form-item">
+        <text class="form-label">购买数量</text>
+        <view class="quantity-control">
+          <view class="quantity-btn" bindtap="decreaseQuantity">-</view>
+          <text class="quantity-num">{{quantity}}</text>
+          <view class="quantity-btn" bindtap="increaseQuantity">+</view>
+        </view>
+      </view>
+      
+      <view class="total-section">
+        <text class="total-label">总计：</text>
+        <text class="total-price">¥{{totalPrice}}</text>
+      </view>
+    </view>
+    <view class="modal-footer">
+      <button class="modal-btn cancel" bindtap="hideBuyModal">取消</button>
+      <button class="modal-btn confirm" bindtap="confirmBuy">确认购买</button>
+    </view>
+  </view>
+
+  <!-- ========== 地址选择弹窗 ========== -->
+  <view class="modal-mask" wx:if="{{showAddressModal}}" bindtap="hideAddressModal"></view>
+  <view class="modal-container" wx:if="{{showAddressModal}}" catchtap="stopPropagation">
+    <view class="modal-header">
+      <text class="modal-title">选择地址</text>
+      <text class="modal-close" bindtap="hideAddressModal">×</text>
+    </view>
+    <scroll-view class="modal-body" scroll-y>
+      <view class="address-item {{item.id === selectedAddress.id ? 'active' : ''}}" 
+            wx:for="{{addressList}}" wx:key="id"
+            bindtap="selectAddress" data-id="{{item.id}}">
+        <text class="address-name">{{item.name}}</text>
+        <text class="address-phone">{{item.phone}}</text>
+        <text class="address-detail">{{item.address}}</text>
+        <text class="address-check" wx:if="{{item.id === selectedAddress.id}}">✓</text>
+        <text class="address-delete" catchtap="deleteAddress" data-id="{{item.id}}">×</text>
+      </view>
+    </scroll-view>
+    <view class="modal-footer">
+      <button class="modal-btn" bindtap="showAddAddress">新增地址</button>
+      <button class="modal-btn cancel" bindtap="hideAddressModal">取消</button>
+    </view>
+  </view>
+
+  <!-- ========== 新增地址弹窗 ========== -->
+  <view class="modal-mask" wx:if="{{showAddAddressModal}}" bindtap="hideAddAddressModal"></view>
+  <view class="modal-container" wx:if="{{showAddAddressModal}}" catchtap="stopPropagation">
+    <view class="modal-header">
+      <text class="modal-title">新增地址</text>
+      <text class="modal-close" bindtap="hideAddAddressModal">×</text>
+    </view>
+    <view class="modal-body">
+      <input class="form-input" placeholder="联系人" value="{{newAddress.name}}" bindinput="onAddressNameInput"/>
+      <input class="form-input" type="number" placeholder="联系电话" value="{{newAddress.phone}}" bindinput="onAddressPhoneInput"/>
+      <input class="form-input" placeholder="详细地址" value="{{newAddress.address}}" bindinput="onAddressDetailInput"/>
+    </view>
+    <view class="modal-footer">
+      <button class="modal-btn cancel" bindtap="hideAddAddressModal">取消</button>
+      <button class="modal-btn confirm" bindtap="saveNewAddress">保存</button>
+    </view>
+  </view>
+</view>

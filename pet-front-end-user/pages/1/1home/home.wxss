@@ -1,0 +1,549 @@
+/* pages/1/1home/home.wxss */
+.page {
+  min-height: 100vh;
+  background-color: #f8f4ff;
+  padding-top: 120rpx;
+}
+
+/* 自定义导航栏 */
+.custom-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 120rpx;
+  background: linear-gradient(135deg, #b39ddb, #9575cd);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30rpx;
+  box-shadow: 0 4rpx 20rpx rgba(149, 117, 205, 0.3);
+  z-index: 100;
+}
+
+.location-box {
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 10rpx 24rpx;
+  border-radius: 40rpx;
+  backdrop-filter: blur(10px);
+}
+
+.location-icon {
+  font-size: 32rpx;
+  margin-right: 8rpx;
+  color: #ffffff;
+}
+
+.location-text {
+  font-size: 28rpx;
+  color: #ffffff;
+  max-width: 200rpx;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.location-arrow {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.8);
+  margin-left: 8rpx;
+}
+
+.navbar-right {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-right .icon {
+  font-size: 40rpx;
+  color: #ffffff;
+}
+
+/* 主滚动区域 */
+.main-scroll {
+  height: 100%;
+  background-color: #f8f4ff;
+}
+
+/* 加载状态 */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  color: #b39ddb;
+  font-size: 28rpx;
+}
+
+.loading-spinner {
+  width: 70rpx;
+  height: 70rpx;
+  border: 6rpx solid #f3e5f5;
+  border-top: 6rpx solid #9575cd;
+  border-radius: 50%;
+  margin-bottom: 20rpx;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ===== 宠物大图区域 ===== */
+.pet-banner-section {
+  position: relative;
+  margin: 30rpx;
+}
+
+.arrow-left, .arrow-right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 60rpx;
+  height: 60rpx;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48rpx;
+  color: #9575cd;
+  z-index: 10;
+  box-shadow: 0 4rpx 12rpx rgba(149, 117, 205, 0.2);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.arrow-left.visible, .arrow-right.visible {
+  opacity: 1;
+}
+
+.arrow-left {
+  left: 20rpx;
+}
+
+.arrow-right {
+  right: 20rpx;
+}
+
+.pet-banner {
+  position: relative;
+  width: 100%;
+  height: 400rpx;
+  border-radius: 30rpx;
+  overflow: hidden;
+  box-shadow: 0 8rpx 24rpx rgba(149, 117, 205, 0.2);
+  border: 4rpx solid #ffffff;
+}
+
+.pet-image {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #e1d9f0, #d1c4e9);
+}
+
+.pet-info-overlay {
+  position: absolute;
+  bottom: 30rpx;
+  left: 30rpx;
+  right: 30rpx;
+  display: flex;
+  justify-content: space-between;
+  color: #ffffff;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+.pet-age, .pet-breed {
+  font-size: 32rpx;
+  font-weight: 500;
+  background-color: rgba(149, 117, 205, 0.7);
+  padding: 8rpx 24rpx;
+  border-radius: 40rpx;
+  backdrop-filter: blur(5px);
+}
+
+.pet-name-tag {
+  position: absolute;
+  top: 30rpx;
+  left: 30rpx;
+  font-size: 40rpx;
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.4);
+  background-color: rgba(179, 157, 219, 0.8);
+  padding: 12rpx 32rpx;
+  border-radius: 50rpx;
+  backdrop-filter: blur(5px);
+  z-index: 2;
+}
+
+.add-pet-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(149, 117, 205, 0.8);
+  backdrop-filter: blur(5px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}
+
+.add-icon {
+  font-size: 80rpx;
+  margin-bottom: 20rpx;
+}
+
+.add-text {
+  font-size: 32rpx;
+}
+
+/* ===== 三个功能按钮 ===== */
+.action-buttons {
+  display: flex;
+  margin: 30rpx;
+  background-color: #ffffff;
+  border-radius: 30rpx;
+  padding: 20rpx;
+  box-shadow: 0 4rpx 16rpx rgba(149, 117, 205, 0.1);
+  border: 2rpx solid #ede7f6;
+}
+
+.action-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-icon {
+  font-size: 48rpx;
+  margin-bottom: 10rpx;
+  color: #9575cd;
+}
+
+.action-text {
+  font-size: 26rpx;
+  color: #5e4b8c;
+  font-weight: 500;
+}
+
+/* ===== 日历区域 ===== */
+.calendar-section {
+  background-color: #ffffff;
+  margin: 30rpx;
+  padding: 30rpx;
+  border-radius: 30rpx;
+  box-shadow: 0 4rpx 16rpx rgba(149, 117, 205, 0.1);
+  border: 2rpx solid #ede7f6;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.month-year {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #5e4b8c;
+}
+
+.calendar-controls {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.all-btn {
+  padding: 8rpx 24rpx;
+  font-size: 26rpx;
+  border-radius: 30rpx;
+  background-color: #f3e5f5;
+  color: #b39ddb;
+}
+
+.all-btn.active {
+  background: linear-gradient(135deg, #b39ddb, #9575cd);
+  color: #ffffff;
+}
+
+.month-nav {
+  display: flex;
+  gap: 20rpx;
+}
+
+.nav-arrow {
+  width: 50rpx;
+  height: 50rpx;
+  background-color: #f3e5f5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  color: #9575cd;
+}
+
+.calendar-grid {
+  width: 100%;
+}
+
+.calendar-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 20rpx;
+}
+
+.week-item {
+  text-align: center;
+  font-size: 28rpx;
+  color: #b39ddb;
+  font-weight: 500;
+}
+
+.calendar-dates {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10rpx;
+}
+
+.date-item {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f4ff;
+  border-radius: 16rpx;
+  position: relative;
+}
+
+.date-item.today {
+  background: linear-gradient(135deg, #b39ddb, #9575cd);
+}
+
+.date-num {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #5e4b8c;
+}
+
+.date-num.today-text {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.date-item.today .date-num {
+  color: #ffffff;
+}
+
+.deworm-dot {
+  width: 8rpx;
+  height: 8rpx;
+  background-color: #9575cd;
+  border-radius: 50%;
+  margin-top: 4rpx;
+}
+
+.date-item.today .deworm-dot {
+  background-color: #ffffff;
+}
+
+/* ===== 关爱提醒区域 ===== */
+.care-section {
+  background-color: #ffffff;
+  margin: 30rpx;
+  padding: 30rpx;
+  border-radius: 30rpx;
+  box-shadow: 0 4rpx 16rpx rgba(149, 117, 205, 0.1);
+  border: 2rpx solid #ede7f6;
+}
+
+.care-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.care-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #5e4b8c;
+}
+
+.care-more {
+  font-size: 26rpx;
+  color: #b39ddb;
+}
+
+.care-message {
+  font-size: 28rpx;
+  color: #9575cd;
+  margin-bottom: 20rpx;
+}
+
+.store-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.store-item {
+  display: flex;
+  gap: 20rpx;
+  padding: 20rpx;
+  background-color: #f8f4ff;
+  border-radius: 20rpx;
+}
+
+.store-image {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 16rpx;
+  background: linear-gradient(135deg, #e1d9f0, #d1c4e9);
+  flex-shrink: 0;
+}
+
+.store-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.store-name {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #5e4b8c;
+  margin-bottom: 6rpx;
+}
+
+.store-distance {
+  font-size: 24rpx;
+  color: #b39ddb;
+  margin-bottom: 4rpx;
+}
+
+.store-address {
+  font-size: 22rpx;
+  color: #9575cd;
+}
+
+.deworm-reminder {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  background: linear-gradient(135deg, #f3e5f5, #e1d9f0);
+  border-radius: 20rpx;
+  margin-top: 20rpx;
+}
+
+.reminder-icon {
+  font-size: 40rpx;
+  margin-right: 20rpx;
+}
+
+.reminder-text {
+  flex: 1;
+  font-size: 28rpx;
+  color: #5e4b8c;
+}
+
+.reminder-arrow {
+  font-size: 36rpx;
+  color: #b39ddb;
+}
+
+.empty-care {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.add-pet-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20rpx 60rpx;
+  background: linear-gradient(135deg, #b39ddb, #9575cd);
+  border-radius: 60rpx;
+  color: #ffffff;
+}
+
+.add-pet-btn .add-icon {
+  font-size: 40rpx;
+  margin-right: 10rpx;
+  margin-bottom: 0;
+}
+
+.add-pet-btn .add-text {
+  font-size: 28rpx;
+}
+
+/* ===== 驱虫计划入口 ===== */
+.deworm-section {
+  background-color: #ffffff;
+  margin: 30rpx;
+  padding: 30rpx;
+  border-radius: 30rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4rpx 16rpx rgba(149, 117, 205, 0.1);
+  border: 2rpx solid #ede7f6;
+}
+
+.deworm-left {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.deworm-icon {
+  font-size: 40rpx;
+}
+
+.deworm-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #5e4b8c;
+}
+
+.deworm-right {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.deworm-tip {
+  font-size: 26rpx;
+  color: #b39ddb;
+}
+
+.deworm-arrow {
+  font-size: 36rpx;
+  color: #b39ddb;
+}
+
+/* 底部留白 */
+.bottom-space {
+  height: 30rpx;
+}
